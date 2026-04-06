@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [message, setMessage] = useState("");
 
   const fetchUsers = async () => {
-    const res = await fetch("http://localhost:5000/api/users");
+    const res = await fetch("https://sms-saas-53mg.vercel.app/api/users");
     const data = await res.json();
     setUsers(data);
   };
@@ -24,7 +24,7 @@ export default function Dashboard() {
   }, []);
 
   const handleSend = async () => {
-    await fetch("http://localhost:5000/api/send", {
+    await fetch("https://sms-saas-53mg.vercel.app/api/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),

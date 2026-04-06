@@ -9,10 +9,10 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URI,
 
   ssl: {
-    rejectUnauthorized: false, // required for Neon / cloud DBs
+    rejectUnauthorized: false,
   },
 
-  max: 5, // max connections
+  max: 5, // max connects
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 30000,
 });
@@ -30,7 +30,7 @@ export const connectDB = async () => {
   }
 };
 
-// Optional: log events
+// log events
 pool.on("connect", () => {
   console.log("New DB connection established");
 });
