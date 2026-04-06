@@ -1,30 +1,42 @@
-const { Sequelize } = require('sequelize');
+import pkg from "pg";
+import dotenv from "dotenv";
 
-const sequelize = new Sequelize(`${process.env.POSTGRES_URI}&uselibpqcompat=true`, {
-  dialect: 'postgres',
-  logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false, // Adjust based on your security requirements
-    },
+dotenv.config();
+
+const { Pool } = pkg;
+
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URI,
+
+  ssl: {
+    rejectUnauthorized: false, // required for Neon / cloud DBs
   },
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000, // Increased timeout to 30 seconds
-    idle: 10000,
-  },
+
+  max: 5, // max connections
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 30000,
 });
 
-const connectDB = async () => {
+// Test connection once
+export const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    console.log("PostgreSQL connected");
-  } catch (err) {
-    console.error("Unable to connect to PostgreSQL:", err);
+    const client = await pool.connect();
+    console.log("PostgreSQL connected successfully");
+    client.release();
+  } catch (error) {
+    console.error("Database connection failed:");
+    console.error(error.message);
     process.exit(1);
   }
 };
 
-module.exports = { sequelize, connectDB };
+// Optional: log events
+pool.on("connect", () => {
+  console.log("New DB connection established");
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected DB error:", err.message);
+});
+
+export default pool;
