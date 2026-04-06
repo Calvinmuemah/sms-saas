@@ -4,8 +4,16 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/ui/navbar";
 import { Card, CardContent } from "@/components/ui/card";
 
+// Define the Message type
+interface Message {
+  _id: string;
+  message: string;
+  status?: string;
+  createdAt: string;
+}
+
 export default function MessagesPage() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]); // Explicitly type messages
 
   useEffect(() => {
     fetch("https://sms-saas-53mg.vercel.app/api/v1/messages")
