@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Pie } from "react-chartjs-2";
+import { toast } from "sonner";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -12,11 +13,16 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchUsers = async () => {
-    const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/users");
-    const data = await res.json();
-    setUsers(data);
+    try {
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/users");
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      toast.error("Failed to load users");
+    }
   };
 
   useEffect(() => {
@@ -24,15 +30,28 @@ export default function Dashboard() {
   }, []);
 
   const handleSend = async () => {
-    if (!message.trim()) return;
+    if (!message.trim()) {
+      toast.warning("Message cannot be empty");
+      return;
+    }
 
-    await fetch("https://sms-saas-53mg.vercel.app/api/v1/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
-    });
+    try {
+      setLoading(true);
 
-    setMessage("");
+      await fetch("https://sms-saas-53mg.vercel.app/api/v1/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      toast.success("SMS sent successfully 🚀");
+      setMessage("");
+      fetchUsers(); // refresh stats
+    } catch (err) {
+      toast.error("Failed to send SMS");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Stats
@@ -58,7 +77,7 @@ export default function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Overview of your SMS activity
+          Monitor your SMS campaigns and user engagement
         </p>
       </div>
 
@@ -106,9 +125,10 @@ export default function Dashboard() {
 
                 <Button
                   onClick={handleSend}
-                  className="bg-green-600 hover:bg-green-700"
+                  disabled={loading}
+                  className="bg-green-600 hover:bg-green-700 disabled:opacity-50"
                 >
-                  Send SMS
+                  {loading ? "Sending..." : "Send SMS"}
                 </Button>
               </div>
             </CardContent>
@@ -128,42 +148,46 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* Recent Users */}
       <Card className="shadow-xl rounded-2xl">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold mb-4">Recent Users</h2>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left border-b">
-                  <th className="py-2">Phone</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.slice(0, 5).map((u) => (
-                  <tr
-                    key={u._id}
-                    className="border-b hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                  >
-                    <td className="py-2">{u.phone}</td>
-                    <td>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          u.optedIn
-                            ? "bg-green-100 text-green-600"
-                            : "bg-red-100 text-red-600"
-                        }`}
-                      >
-                        {u.optedIn ? "Opted In" : "Opted Out"}
-                      </span>
-                    </td>
+          {users.length === 0 ? (
+            <p className="text-gray-500">No users found</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left border-b">
+                    <th className="py-2">Phone</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {users.slice(0, 5).map((u) => (
+                    <tr
+                      key={u._id}
+                      className="border-b hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    >
+                      <td className="py-2">{u.phone}</td>
+                      <td>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            u.optedIn
+                              ? "bg-green-100 text-green-600"
+                              : "bg-red-100 text-red-600"
+                          }`}
+                        >
+                          {u.optedIn ? "Opted In" : "Opted Out"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
