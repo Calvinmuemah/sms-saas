@@ -5,8 +5,15 @@ import Navbar from "@/components/ui/navbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
+// Define the User type
+interface User {
+  _id: string;
+  phone: string;
+  optedIn: boolean;
+}
+
 export default function UsersPage() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]); // Explicitly type users
   const [search, setSearch] = useState("");
 
   useEffect(() => {
