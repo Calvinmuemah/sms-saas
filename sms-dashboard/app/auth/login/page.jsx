@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,14 +24,13 @@ export default function LoginPage() {
 
       const res = await fetch("/api/auth/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      // Save token securely
       localStorage.setItem("token", data.token);
 
       toast.success("Welcome back 🚀");
@@ -43,38 +43,81 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md space-y-4">
+    <div className="min-h-screen grid md:grid-cols-2">
+      
+      {/* LEFT SIDE (Branding) */}
+      <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-green-500 to-teal-600 text-white p-10">
+        <div>
+          <h1 className="text-4xl font-bold mb-4">SMS SaaS</h1>
+          <p className="text-lg opacity-90">
+            Manage campaigns, track analytics, and scale your messaging.
+          </p>
+        </div>
+      </div>
 
-        <h1 className="text-2xl font-bold text-center">Login</h1>
+      {/* RIGHT SIDE (Form) */}
+      <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-6">
+        <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
 
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <div className="text-center">
+            <h2 className="text-2xl font-bold">Welcome Back</h2>
+            <p className="text-gray-500 text-sm">Login to your account</p>
+          </div>
 
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          {/* Email */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
+            <Input
+              type="email"
+              placeholder="Email"
+              className="pl-10"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <Button onClick={handleLogin} disabled={loading} className="w-full">
-          {loading ? "Logging in..." : "Login"}
-        </Button>
+          {/* Password */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
+            <Input
+              type="password"
+              placeholder="Password"
+              className="pl-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <p className="text-sm text-center text-gray-500">
-          Don’t have an account?{" "}
-          <span
-            onClick={() => router.push("/auth/register")}
-            className="text-green-600 cursor-pointer"
+          {/* Forgot Password */}
+          <div className="text-right text-sm">
+            <span
+              onClick={() => router.push("/auth/forgot-password")}
+              className="text-green-600 cursor-pointer hover:underline"
+            >
+              Forgot password?
+            </span>
+          </div>
+
+          {/* Button */}
+          <Button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700"
           >
-            Register
-          </span>
-        </p>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+
+          {/* Register Link */}
+          <p className="text-sm text-center text-gray-500">
+            Don’t have an account?{" "}
+            <span
+              onClick={() => router.push("/auth/register")}
+              className="text-green-600 cursor-pointer hover:underline"
+            >
+              Create account
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -5,23 +5,21 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Mail, Lock, User } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
 
   const [step, setStep] = useState("register");
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // STEP 1: REGISTER
   const handleRegister = async () => {
     if (!name || !email || !password) {
-      return toast.warning("All fields are required");
+      return toast.warning("All fields required");
     }
 
     try {
@@ -36,7 +34,7 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      toast.success("OTP sent to your email 📩");
+      toast.success("OTP sent 📩");
       setStep("verify");
     } catch (err) {
       toast.error(err.message);
@@ -45,7 +43,6 @@ export default function RegisterPage() {
     }
   };
 
-  // STEP 2: VERIFY OTP
   const handleVerify = async () => {
     if (!otp) return toast.warning("Enter OTP");
 
@@ -60,7 +57,8 @@ export default function RegisterPage() {
 
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
-      toast.success("Account verified!");
+
+      toast.success("Account verified 🎉");
       router.push("/auth/login");
     } catch (err) {
       toast.error(err.message);
@@ -70,40 +68,83 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md space-y-4">
+    <div className="min-h-screen grid md:grid-cols-2">
 
-        <h1 className="text-2xl font-bold text-center">
-          {step === "register" ? "Create Account" : "Verify Email"}
-        </h1>
+      {/* LEFT SIDE */}
+      <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-green-500 to-teal-600 text-white p-10">
+        <div>
+          <h1 className="text-4xl font-bold mb-4">Join SMS SaaS</h1>
+          <p className="text-lg opacity-90">
+            Start sending bulk SMS and grow your audience.
+          </p>
+        </div>
+      </div>
 
-        {step === "register" ? (
-          <>
-            <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {/* RIGHT SIDE */}
+      <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-6">
+        <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
 
-            <Button onClick={handleRegister} disabled={loading} className="w-full">
-              {loading ? "Creating..." : "Register"}
-            </Button>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-gray-500 text-center">
-              Enter the OTP sent to {email}
-            </p>
+          <h2 className="text-2xl font-bold text-center">
+            {step === "register" ? "Create Account" : "Verify Email"}
+          </h2>
 
-            <Input
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-            />
+          {step === "register" ? (
+            <>
+              <div className="relative">
+                <User className="absolute left-3 top-3 text-gray-400" size={18}/>
+                <Input className="pl-10" placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)} />
+              </div>
 
-            <Button onClick={handleVerify} disabled={loading} className="w-full">
-              {loading ? "Verifying..." : "Verify OTP"}
-            </Button>
-          </>
-        )}
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 text-gray-400" size={18}/>
+                <Input className="pl-10" type="email" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
+              </div>
+
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 text-gray-400" size={18}/>
+                <Input className="pl-10" type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} />
+              </div>
+
+              <Button onClick={handleRegister} className="w-full bg-green-600">
+                {loading ? "Creating..." : "Register"}
+              </Button>
+
+              <p className="text-sm text-center text-gray-500">
+                Already have an account?{" "}
+                <span
+                  onClick={() => router.push("/auth/login")}
+                  className="text-green-600 cursor-pointer"
+                >
+                  Login
+                </span>
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-center text-gray-500">
+                Enter the OTP sent to <b>{email}</b>
+              </p>
+
+              <Input
+                className="text-center tracking-widest text-lg"
+                placeholder="••••••"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+
+              <Button onClick={handleVerify} className="w-full bg-green-600">
+                {loading ? "Verifying..." : "Verify OTP"}
+              </Button>
+
+              <p
+                onClick={() => setStep("register")}
+                className="text-center text-sm text-green-600 cursor-pointer"
+              >
+                Change email
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
