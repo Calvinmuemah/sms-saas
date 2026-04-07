@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/app", // Redirect to the landing page
+        destination: "/page", // Redirect to the correct landing page
         permanent: false,
       },
     ];
