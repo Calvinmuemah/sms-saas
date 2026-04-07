@@ -9,7 +9,7 @@ import { toast } from "sonner";
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [step, setStep] = useState<"register" | "verify">("register");
+  const [step, setStep] = useState("register");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,8 +60,7 @@ export default function RegisterPage() {
 
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
-
-      toast.success("Account verified! 🎉");
+      toast.success("Account verified!");
       router.push("/auth/login");
     } catch (err) {
       toast.error(err.message);
