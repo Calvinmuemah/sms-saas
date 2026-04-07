@@ -72,7 +72,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -80,6 +79,9 @@ export default function Dashboard() {
           Monitor your SMS campaigns and user engagement
         </p>
       </div>
+
+      {/* Replace Go to Dashboard Button with Get Started */}
+      <Button onClick={() => router.push("/auth/register")}>Get Started</Button>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
