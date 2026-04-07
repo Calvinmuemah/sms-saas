@@ -14,6 +14,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://sms-saas-53mg.vercel.app/api/v1";
+
   const handleLogin = async () => {
     if (!email || !password) {
       return toast.warning("Email and password required");
@@ -22,14 +24,14 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
-      if (!data.success) throw new Error(data.message);
+      if (!data.success) throw new Error(data.message || "Login failed. Please try again.");
 
       localStorage.setItem("token", data.token);
 
