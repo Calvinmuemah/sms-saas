@@ -67,9 +67,9 @@ export default function Home() {
             Send, manage, and track SMS messages in real-time. Keep your subscribers engaged with advanced analytics.
           </p>
 
-          <Link href="/dashboard">
+          <Link href="/auth/register">
             <Button className="px-8 py-3 text-lg bg-white text-green-600 font-bold hover:bg-gray-100 transition">
-              Go to Dashboard
+              Get Started
             </Button>
           </Link>
 
