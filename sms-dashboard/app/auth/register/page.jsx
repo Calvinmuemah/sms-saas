@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
       toast.success("OTP sent to your email 📩");
       setStep("verify");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);
@@ -63,7 +63,7 @@ export default function RegisterPage() {
 
       toast.success("Account verified! 🎉");
       router.push("/auth/login");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);

@@ -35,7 +35,7 @@ export default function LoginPage() {
 
       toast.success("Welcome back 🚀");
       router.push("/dashboard");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);
