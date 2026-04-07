@@ -24,6 +24,9 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
+      console.log("Login Request Payload:", { email, password });
+      console.log("API URL:", `${API_BASE_URL}/auth/login`);
+
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
