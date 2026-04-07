@@ -10,6 +10,7 @@ import analyticsRoutes from "./routes/analytics.routes.js";
 import scheduledRoutes from "./routes/scheduled.routes.js";
 import apiRoutes from "./routes/scheduled.routes.js";
 import profileRoutes from "./routes/scheduled.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/v1/analytics", analyticsRoutes);
 app.use("/api/v1/scheduled", scheduledRoutes);
 app.use("/api/v1/api-key", apiRoutes);
 app.use("/api/v1/profile", profileRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 
 // Health check

@@ -22,7 +22,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
