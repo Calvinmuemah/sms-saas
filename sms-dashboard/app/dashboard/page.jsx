@@ -12,16 +12,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// Define the User type
-interface User {
-  _id: string;
-  optedIn: boolean;
-  phone: string;
-}
-
 export default function Dashboard() {
   const router = useRouter();
-  const [users, setUsers] = useState<User[]>([]); // Explicitly type users
+  const [users, setUsers] = useState([]); // Removed explicit typing
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
