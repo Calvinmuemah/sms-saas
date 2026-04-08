@@ -21,13 +21,14 @@ export default function Dashboard() {
   const [parsedNumbers, setParsedNumbers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Protect route
+  // 🔥 NEW STATES
+  const [result, setResult] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) router.push("/auth/login");
   }, [router]);
 
-  // Fetch users
   const fetchUsers = async () => {
     try {
       const res = await fetch(
@@ -49,7 +50,7 @@ export default function Dashboard() {
     fetchUsers();
   }, []);
 
-  // Parse numbers (comma / newline)
+  // Parse numbers
   useEffect(() => {
     const list = numbers
       .split(/[\n,]+/)
@@ -59,39 +60,46 @@ export default function Dashboard() {
     setParsedNumbers(list);
   }, [numbers]);
 
-  // Handle file upload (CSV/TXT)
+  // File upload
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const text = await file.text();
-
     setNumbers((prev) => prev + "\n" + text);
-    toast.success("Numbers loaded from file 📂");
+    toast.success("Numbers loaded 📂");
   };
 
-  // Send SMS
+  // 🔥 SEND SMS WITH RESPONSE HANDLING
   const handleSend = async () => {
     if (!message.trim()) return toast.warning("Message is empty");
     if (parsedNumbers.length === 0)
-      return toast.warning("Add at least one phone number");
+      return toast.warning("Add at least one number");
 
     try {
       setLoading(true);
+      setResult(null);
 
-      await fetch("https://sms-saas-53mg.vercel.app/api/v1/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          message,
-          numbers: parsedNumbers,
-        }),
-      });
+      const res = await fetch(
+        "https://sms-saas-53mg.vercel.app/api/v1/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            message,
+            numbers: parsedNumbers,
+          }),
+        }
+      );
 
-      toast.success(`SMS sent to ${parsedNumbers.length} users 🚀`);
+      const data = await res.json();
+
+      setResult(data);
+
+      toast.success(`Processed ${data.total} numbers 🚀`);
       setMessage("");
       setNumbers("");
     } catch {
@@ -126,7 +134,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold">SMS Dashboard</h1>
           <p className="text-gray-500">
-            Send bulk SMS and manage your campaigns
+            Send bulk SMS and manage campaigns
           </p>
         </div>
 
@@ -150,60 +158,94 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Main Section */}
+        {/* Main */}
         <div className="grid md:grid-cols-3 gap-6">
-          {/* SMS FORM */}
+          {/* FORM */}
           <div className="md:col-span-2">
             <Card className="shadow-xl rounded-2xl">
               <CardContent className="p-6 space-y-4">
                 <h2 className="text-xl font-semibold">Send Bulk SMS</h2>
 
-                {/* Numbers Input */}
                 <textarea
-                  placeholder="Enter phone numbers (comma or new line separated)"
+                  placeholder="Enter numbers (comma or new line)"
                   value={numbers}
                   onChange={(e) => setNumbers(e.target.value)}
-                  className="w-full p-4 rounded-lg border bg-gray-50 dark:bg-gray-800"
+                  className="w-full p-4 rounded-lg border"
                   rows={4}
                 />
 
-                {/* Upload */}
                 <input
                   type="file"
                   accept=".csv,.txt"
                   onChange={handleFileUpload}
-                  className="text-sm"
                 />
 
-                {/* Count */}
                 <p className="text-sm text-gray-500">
                   {parsedNumbers.length} numbers loaded
                 </p>
 
-                {/* Message */}
                 <textarea
                   placeholder="Type your message..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full p-4 rounded-lg border bg-gray-50 dark:bg-gray-800"
+                  className="w-full p-4 rounded-lg border"
                   rows={4}
                 />
 
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500">
-                    {message.length} characters
-                  </p>
-
-                  <Button
-                    onClick={handleSend}
-                    disabled={loading}
-                    className="bg-green-600 hover:bg-green-700"
-                  >
-                    {loading ? "Sending..." : "Send SMS"}
-                  </Button>
-                </div>
+                <Button
+                  onClick={handleSend}
+                  disabled={loading}
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  {loading ? "Sending..." : "Send SMS"}
+                </Button>
               </CardContent>
             </Card>
+
+            {/* 🔥 RESULTS UI */}
+            {result && (
+              <Card className="mt-6 shadow-xl rounded-2xl">
+                <CardContent className="p-6 space-y-4">
+                  <h2 className="text-xl font-semibold">
+                    Delivery Report
+                  </h2>
+
+                  <div className="flex gap-6 text-sm">
+                    <p>Total: {result.total}</p>
+                    <p className="text-green-600">
+                      Successful: {result.successful}
+                    </p>
+                    <p className="text-red-600">
+                      Failed: {result.failed?.length || 0}
+                    </p>
+                  </div>
+
+                  {/* FAILED LIST */}
+                  {result.failed?.length > 0 && (
+                    <div className="space-y-3">
+                      {result.failed.map((f, i) => (
+                        <div
+                          key={i}
+                          className="p-4 rounded-lg border bg-red-50 dark:bg-red-900/20"
+                        >
+                          <p className="font-medium">{f.phone}</p>
+                          <p className="text-sm text-red-500">
+                            {f.status}
+                          </p>
+
+                          {f.status === "UserInBlacklist" && (
+                            <p className="text-sm mt-2 text-yellow-600">
+                              ⚠️ This user has unsubscribed. Ask them to send
+                              <strong> START</strong> to receive messages again.
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Chart */}

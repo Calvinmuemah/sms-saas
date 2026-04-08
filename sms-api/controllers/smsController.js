@@ -1,94 +1,132 @@
-import { createUser, getUserByPhone } from "../models/User.js";
-import { createMessage } from "../models/Message.js";
-import isValidNumber from "../utils/validateNumber.js";
-import { sendBulkSMS } from "../services/smsService.js";
+import {
+  createUser,
+  getUserByPhone,
+  updateOptStatus,
+  getOptedInUsers,
+} from "../models/User.js";
 
-// 📥 CALLBACK (AUTO OPT-IN / OPT-OUT)
+import { createMessage } from "../models/Message.js";
+import isValidNumber, { normalizeNumber } from "../utils/validateNumber.js";
+import { sendBulkSMS } from "../services/smsService.js";
+import pool from "../config/db.js";
+
+// 📥 CALLBACK (OPT IN / OUT)
 export const smsCallback = async (req, res) => {
   const { from, text } = req.body;
+
+  const phone = normalizeNumber(from);
   const message = text.trim().toUpperCase();
 
-  if (!isValidNumber(from)) return res.send("Invalid");
+  if (!phone || !isValidNumber(phone)) return res.send("Invalid");
 
-  let user = await getUserByPhone(from);
+  let user = await getUserByPhone(phone);
 
   if (!user) {
-    user = await createUser({ phone: from });
+    await createUser(phone);
   }
 
   try {
     if (message === "STOP") {
-      user.optedIn = false;
-      await user.save();
+      await updateOptStatus(phone, false);
 
-      console.log(`${from} opted OUT`);
-
-      await sendBulkSMS([from], "You have been unsubscribed. Reply START to opt in again.");
+      await sendBulkSMS(
+        [phone],
+        "You have been unsubscribed. Reply START to opt in again."
+      );
     }
 
     if (message === "START" || message === "YES") {
-      user.optedIn = true;
-      await user.save();
+      await updateOptStatus(phone, true);
 
-      console.log(`${from} opted IN`);
-
-      await sendBulkSMS([from], "You have successfully opted in! You will now receive messages.");
+      await sendBulkSMS(
+        [phone],
+        "You are now subscribed ✅"
+      );
     }
 
     res.send("OK");
-
   } catch (err) {
     console.error(err);
     res.send("Error");
   }
 };
 
-
 // 🌐 MANUAL OPT-IN
 export const optIn = async (req, res) => {
-  const { number } = req.body;
+  let { number } = req.body;
 
-  if (!isValidNumber(number)) {
+  const phone = normalizeNumber(number);
+
+  if (!phone || !isValidNumber(phone)) {
     return res.status(400).json({ error: "Invalid number" });
   }
 
-  let user = await getUserByPhone(number);
+  await createUser(phone);
+  await updateOptStatus(phone, true);
 
-  if (!user) {
-    user = await createUser({ phone: number });
-  }
-
-  user.optedIn = true;
-  await user.save();
-
-  res.json({ message: "User opted in" });
+  res.json({ success: true, message: "User opted in", phone });
 };
 
-
-// 📤 SEND BULK SMS
+// 📤 SEND SMS (PRO VERSION)
 export const sendSMS = async (req, res) => {
-  const { message } = req.body;
+  const { message, numbers } = req.body;
 
-  const users = await User.findAll({ where: { optedIn: true } });
-  const numbers = users.map(u => u.phone);
+  if (!message) {
+    return res.status(400).json({ error: "Message required" });
+  }
 
-  if (numbers.length === 0) {
-    return res.json({ message: "No opted-in users" });
+  let recipients = [];
+
+  // Use numbers from frontend
+  if (numbers && numbers.length > 0) {
+    recipients = numbers
+      .map(normalizeNumber)
+      .filter((n) => n && isValidNumber(n));
+  } else {
+    // fallback → opted-in users
+    const users = await getOptedInUsers();
+    recipients = users.map((u) => u.phone);
+  }
+
+  if (recipients.length === 0) {
+    return res.json({ success: false, message: "No valid recipients" });
   }
 
   try {
-    const results = await sendBulkSMS(numbers, message);
+    const results = await sendBulkSMS(recipients, message);
 
+    // ✅ Count success
+    const successful = results.filter(
+      (r) => r.status === "Success"
+    );
+
+    const failed = results.filter(
+      (r) => r.status !== "Success"
+    );
+
+    // ✅ Save all messages
     for (let r of results) {
       await createMessage({
         phone: r.number,
         message,
         status: r.status,
+        cost: r.cost || null,
         messageId: r.messageId,
       });
     }
 
-    res.json({ message: "SMS sent", results });
+    res.json({
+      success: true,
+      message: "SMS processed",
+      total: recipients.length,
+      successful: successful.length,
+
+      // 🔥 VERY IMPORTANT (for UI + re-send)
+      failed: failed.map((f) => ({
+        phone: f.number,
+        status: f.status,
+      })),
+    });
 
   } catch (err) {
     console.error(err);
@@ -96,18 +134,17 @@ export const sendSMS = async (req, res) => {
   }
 };
 
-
 // 📡 DELIVERY REPORT
 export const deliveryReport = async (req, res) => {
-  const { id, status, phoneNumber } = req.body;
+  const { id, status } = req.body;
 
   try {
-    await Message.update(
-      { status },
-      { where: { messageId: id } }
+    await pool.query(
+      "UPDATE messages SET status=$1 WHERE message_id=$2",
+      [status, id]
     );
 
-    console.log(`DLR: ${phoneNumber} -> ${status}`);
+    console.log(`DLR Update → ${id}: ${status}`);
 
     res.send("OK");
   } catch (err) {

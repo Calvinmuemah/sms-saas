@@ -1,36 +1,41 @@
 import pool from "../config/db.js";
 
 // Create user
-export const createUser = async ({ phone, optedIn = true }) => {
-  const query = `
-    INSERT INTO users (phone, opted_in, opt_in_date)
-    VALUES ($1, $2, NOW())
-    RETURNING *;
-  `;
+export const createUser = async (phone) => {
+  const result = await pool.query(
+    `INSERT INTO contacts (phone, opted_in)
+     VALUES ($1, true)
+     ON CONFLICT (phone) DO NOTHING
+     RETURNING *`,
+    [phone]
+  );
 
-  const values = [phone, optedIn];
-
-  const result = await pool.query(query, values);
   return result.rows[0];
 };
 
 // Get user by phone
 export const getUserByPhone = async (phone) => {
-  const query = `SELECT * FROM users WHERE phone = $1 LIMIT 1;`;
+  const result = await pool.query(
+    "SELECT * FROM contacts WHERE phone=$1",
+    [phone]
+  );
 
-  const result = await pool.query(query, [phone]);
   return result.rows[0];
 };
 
-// Update opt-in status
-export const updateOptIn = async (phone, optedIn) => {
-  const query = `
-    UPDATE users
-    SET opted_in = $1
-    WHERE phone = $2
-    RETURNING *;
-  `;
+// Update opt status
+export const updateOptStatus = async (phone, status) => {
+  await pool.query(
+    "UPDATE contacts SET opted_in=$1 WHERE phone=$2",
+    [status, phone]
+  );
+};
 
-  const result = await pool.query(query, [optedIn, phone]);
-  return result.rows[0];
+// Get opted-in users
+export const getOptedInUsers = async () => {
+  const result = await pool.query(
+    "SELECT phone FROM contacts WHERE opted_in=true"
+  );
+
+  return result.rows;
 };
