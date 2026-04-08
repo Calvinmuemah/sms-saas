@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://sms-saas-53mg.vercel.app/api/v1";
+  const API_BASE_URL = "https://sms-saas-53mg.vercel.app/api/v1";
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,8 +24,8 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      console.log("Login Request Payload:", { email, password });
-      console.log("API URL:", `${API_BASE_URL}/auth/login`);
+      // console.log("Login Request Payload:", { email, password });
+      // console.log("API URL:", `${API_BASE_URL}/auth/login`);
 
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
