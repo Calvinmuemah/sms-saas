@@ -152,3 +152,14 @@ export const deliveryReport = async (req, res) => {
     res.send("Error");
   }
 };
+
+// 📜 GET ALL MESSAGES
+export const getAllMessages = async (req, res) => {
+  try {
+    const { rows: messages } = await pool.query("SELECT * FROM messages ORDER BY created_at DESC");
+    res.json({ success: true, messages });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch messages" });
+  }
+};

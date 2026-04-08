@@ -7,5 +7,6 @@ router.post("/callback", smsController.smsCallback);
 router.post("/optin", smsController.optIn);
 router.post("/send", smsController.sendSMS);
 router.post("/delivery-report", smsController.deliveryReport);
+router.get("/messages", smsController.getAllMessages);
 
 export default router;
