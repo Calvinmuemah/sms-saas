@@ -18,10 +18,18 @@ export default function MessagesPage() {
         return res.json();
       })
       .then((data) => {
-        setMessages(data);
-        setError(null);
+        console.log("API Response:", data); // Log the API response
+        if (data.success && Array.isArray(data.messages)) {
+          setMessages(data.messages);
+          setError(null);
+        } else {
+          throw new Error("Unexpected data format");
+        }
       })
-      .catch((err) => setError(err.message))
+      .catch((err) => {
+        console.error("Error fetching messages:", err);
+        setError(err.message);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -41,24 +49,36 @@ export default function MessagesPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left">
-                    <th className="py-2">Message</th>
+                    <th className="py-2">Phone</th>
+                    <th>Message</th>
                     <th>Status</th>
+                    <th>Cost</th>
+                    <th>Message ID</th>
                     <th>Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {messages.map((m) => (
                     <tr
-                      key={m._id}
+                      key={m.id}
                       className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                      <td className="py-2">{m.message}</td>
+                      <td className="py-2">{m.phone}</td>
+                      <td>{m.message}</td>
                       <td>
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-600">
-                          {m.status || "Sent"}
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            m.status === "Success"
+                              ? "bg-green-100 text-green-600"
+                              : "bg-red-100 text-red-600"
+                          }`}
+                        >
+                          {m.status}
                         </span>
                       </td>
-                      <td>{new Date(m.createdAt).toLocaleString()}</td>
+                      <td>{m.cost}</td>
+                      <td>{m.message_id !== "None" ? m.message_id : "N/A"}</td>
+                      <td>{new Date(m.created_at).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
