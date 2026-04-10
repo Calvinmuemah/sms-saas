@@ -19,7 +19,7 @@ export default function ScheduledPage() {
     try {
       const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled");
       const data = await res.json();
-      setSchedules(data);
+      setSchedules(Array.isArray(data) ? data : []); // Ensure data is an array
     } catch {
       toast.error("Failed to load schedules");
     }
@@ -27,9 +27,9 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients"); // Correct endpoint for fetching recipients
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients");
       const data = await res.json();
-      setExistingRecipients(data);
+      setExistingRecipients(Array.isArray(data) ? data : []); // Ensure data is an array
     } catch {
       toast.error("Failed to load recipients");
     }
