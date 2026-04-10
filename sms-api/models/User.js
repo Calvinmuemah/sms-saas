@@ -58,3 +58,35 @@ export const getAllUsers = async () => {
   const result = await pool.query("SELECT phone, opted_in FROM contacts");
   return result.rows;
 };
+
+// Create recipient group
+export const createRecipientGroup = async (name, numbers) => {
+  const result = await pool.query(
+    `INSERT INTO recipient_groups (name, numbers) VALUES ($1, $2) RETURNING *`,
+    [name, numbers]
+  );
+  return result.rows[0];
+};
+
+// Get all recipient groups
+export const getRecipientGroups = async () => {
+  const result = await pool.query(
+    `SELECT * FROM recipient_groups ORDER BY created_at DESC`
+  );
+  return result.rows;
+};
+
+// Update recipient group
+export const updateRecipientGroup = async (id, name, numbers) => {
+  const result = await pool.query(
+    `UPDATE recipient_groups SET name=$1, numbers=$2 WHERE id=$3 RETURNING *`,
+    [name, numbers, id]
+  );
+  return result.rows[0];
+};
+
+// Delete recipient group
+export const deleteRecipientGroup = async (id) => {
+  await pool.query(`DELETE FROM recipient_groups WHERE id=$1`, [id]);
+  return { message: "Recipient group deleted" };
+};
