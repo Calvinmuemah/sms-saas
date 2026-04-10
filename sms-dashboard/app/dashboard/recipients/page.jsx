@@ -11,6 +11,7 @@ export default function RecipientsPage() {
   const [name, setName] = useState("");
   const [numbers, setNumbers] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editingRecipient, setEditingRecipient] = useState(null);
 
   // Fetch recipients
   const fetchRecipients = async () => {
@@ -68,16 +69,23 @@ export default function RecipientsPage() {
     }
   };
 
-  // Update recipient group
-  const handleUpdate = async (id, updatedData) => {
+  const handleEditClick = (recipient) => {
+    setEditingRecipient(recipient);
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    if (!editingRecipient) return;
+
     try {
-      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/recipients/${id}`, {
+      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/recipients/${editingRecipient.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify({ name: editingRecipient.name, numbers: editingRecipient.numbers }),
       });
 
       toast.success("Recipient group updated");
+      setEditingRecipient(null);
       fetchRecipients();
     } catch {
       toast.error("Failed to update recipient group");
@@ -135,7 +143,10 @@ export default function RecipientsPage() {
                   <td className="py-2">{r.name}</td>
                   <td>{r.numbers.join(", ")}</td>
                   <td>
-                    <Button size="sm" onClick={() => handleUpdate(r.id, { name: r.name, numbers: r.numbers })}>
+                    <Button
+                      onClick={() => handleEditClick(r)}
+                      className="bg-blue-500 hover:bg-blue-600"
+                    >
                       Update
                     </Button>
                     <Button size="sm" onClick={() => handleDelete(r.id)}>
@@ -148,6 +159,37 @@ export default function RecipientsPage() {
           </table>
         </CardContent>
       </Card>
+
+      {/* Edit Recipient Form */}
+      {editingRecipient && (
+        <Card className="shadow-xl rounded-2xl">
+          <CardContent className="p-6 space-y-4">
+            <h2 className="text-lg font-semibold">Edit Recipient Group</h2>
+            <form onSubmit={handleUpdateSubmit} className="space-y-4">
+              <Input
+                placeholder="Group Name"
+                value={editingRecipient.name}
+                onChange={(e) => setEditingRecipient({ ...editingRecipient, name: e.target.value })}
+              />
+              <textarea
+                placeholder="Numbers (comma-separated)"
+                value={editingRecipient.numbers.join(", ")}
+                onChange={(e) => setEditingRecipient({ ...editingRecipient, numbers: e.target.value.split(",") })}
+                className="w-full p-4 rounded-lg border"
+                rows={4}
+              />
+              <div className="flex gap-2">
+                <Button type="submit" className="bg-green-500 hover:bg-green-600">
+                  Save Changes
+                </Button>
+                <Button onClick={() => setEditingRecipient(null)} className="bg-gray-500 hover:bg-gray-600">
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

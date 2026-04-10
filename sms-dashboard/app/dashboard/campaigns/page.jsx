@@ -172,7 +172,7 @@ export default function CampaignsPage() {
                     </span>
                   </td>
 
-                  <td>{c.recipients || 0}</td>
+                  <td>{c.recipients > 0 ? c.recipients : "No recipients"}</td>
 
                   <td>
                     <Button size="sm" onClick={() => handleSend(c._id)}>
