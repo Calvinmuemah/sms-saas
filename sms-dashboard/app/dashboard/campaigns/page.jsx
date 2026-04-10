@@ -22,7 +22,7 @@ export default function CampaignsPage() {
       const data = await res.json();
       console.log("API Response for campaigns:", data); // Log the API response
 
-      if (data.success) {
+      if (data.success && Array.isArray(data.data)) {
         // Validate each campaign object before setting state
         const validCampaigns = data.data.filter((campaign) => {
           const isValid = campaign && campaign.name && campaign.status && campaign.recipients !== undefined;
@@ -35,7 +35,7 @@ export default function CampaignsPage() {
         setCampaigns(validCampaigns);
         console.log("Valid campaigns set successfully:", validCampaigns); // Log valid campaigns
       } else {
-        console.error("API Error: ", data);
+        console.error("API Error: Invalid response structure or success flag is false", data);
         toast.error("Failed to load campaigns");
       }
     } catch (error) {
