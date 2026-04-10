@@ -15,6 +15,21 @@ export default function CampaignsPage() {
   const [recipients, setRecipients] = useState([]); // State to store recipients
   const [loading, setLoading] = useState(false);
 
+  // Fetch campaigns
+  const fetchCampaigns = async () => {
+    try {
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns");
+      const data = await res.json();
+      if (data.success) {
+        setCampaigns(data.data);
+      } else {
+        toast.error("Failed to load campaigns");
+      }
+    } catch {
+      toast.error("Failed to load campaigns");
+    }
+  };
+
   // Fetch recipients
   const fetchRecipients = async () => {
     try {
