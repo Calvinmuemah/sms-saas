@@ -171,7 +171,7 @@ export default function ScheduledPage() {
                 <tr key={s._id} className="border-b">
                   <td>{s.message}</td>
                   <td>{new Date(s.scheduledAt).toLocaleString()}</td>
-                  <td>{s.recipients.join(", ")}</td>
+                  <td>{Array.isArray(s.recipients) ? s.recipients.join(", ") : "No recipients"}</td>
                   <td>
                     <Button onClick={() => handleCancel(s._id)}>Cancel</Button>
                   </td>
