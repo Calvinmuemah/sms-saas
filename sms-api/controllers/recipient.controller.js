@@ -16,7 +16,11 @@ export const createRecipient = async (req, res) => {
 export const fetchRecipients = async (req, res) => {
   try {
     const groups = await getRecipientGroups();
-    res.status(200).json({ success: true, data: groups });
+    const formattedGroups = groups.map(group => ({
+      ...group,
+      numbers: typeof group.numbers === 'string' ? group.numbers.split(',') : group.numbers, // Ensure numbers is an array
+    }));
+    res.status(200).json({ success: true, data: formattedGroups });
   } catch (error) {
     console.error("Error fetching recipient groups:", error);
     res.status(500).json({ success: false, message: "Failed to fetch recipient groups" });
