@@ -36,22 +36,23 @@ export default function Dashboard() {
     if (!token) router.push("/auth/login");
   }, [router]);
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const res = await fetch(
-  //       "https://sms-saas-53mg.vercel.app/api/v1/users",
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     setUsers(data);
-  //   } catch {
-  //     toast.error("Failed to load users");
-  //   }
-  // };
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch(
+        "https://sms-saas-53mg.vercel.app/api/v1/users",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      setUsers(data);
+    } catch {
+      toast.error("Failed to load users");
+    }
+  };
+
   const fetchUserCounts = async () => {
     try {
       const res = await fetch(
