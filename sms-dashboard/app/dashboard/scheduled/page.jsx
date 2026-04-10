@@ -115,36 +115,39 @@ export default function ScheduledPage() {
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
-          <div>
-            <h3 className="text-lg font-medium">Recipients</h3>
-            <ul>
-              {recipients.map((r, index) => (
-                <li key={index}>{r}</li>
-              ))}
-            </ul>
-            <div className="flex space-x-2">
+          <div className="flex space-x-4">
+            <div className="flex-1">
+              <h3 className="text-lg font-medium">Input Numbers</h3>
               <Input
                 type="text"
-                placeholder="Add recipient manually"
+                placeholder="Enter phone number"
                 value={manualRecipient}
                 onChange={(e) => setManualRecipient(e.target.value)}
               />
-              <Button onClick={handleAddRecipient}>Add</Button>
+              <Button onClick={handleAddRecipient} className="mt-2">
+                Add Number
+              </Button>
             </div>
-            <div>
-              <h4 className="text-md font-medium mt-4">Select from existing recipients</h4>
-              <ul>
+            <div className="flex-1">
+              <h3 className="text-lg font-medium">Select Existing Recipients</h3>
+              <select
+                className="w-full p-2 border rounded-lg"
+                onChange={(e) => handleSelectRecipient(e.target.value)}
+              >
+                <option value="">Select a recipient</option>
                 {existingRecipients.map((recipient) => (
-                  <li key={recipient.id} className="flex items-center space-x-2">
-                    <span>{recipient.phone}</span>
-                    <Button onClick={() => handleSelectRecipient(recipient.phone)}>
-                      Add
-                    </Button>
-                  </li>
+                  <option key={recipient.id} value={recipient.phone}>
+                    {recipient.phone}
+                  </option>
                 ))}
-              </ul>
+              </select>
             </div>
           </div>
+          <ul className="mt-4">
+            {recipients.map((r, index) => (
+              <li key={index}>{r}</li>
+            ))}
+          </ul>
           <Button onClick={handleSchedule} disabled={loading}>
             {loading ? "Scheduling..." : "Schedule"}
           </Button>
