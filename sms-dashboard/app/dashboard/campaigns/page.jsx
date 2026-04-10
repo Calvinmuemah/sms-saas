@@ -21,9 +21,19 @@ export default function CampaignsPage() {
       const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns");
       const data = await res.json();
       console.log("API Response for campaigns:", data); // Log the API response
+
       if (data.success) {
-        setCampaigns(data.data);
-        console.log("Campaigns set successfully:", data.data); // Log the campaigns being set
+        // Validate each campaign object before setting state
+        const validCampaigns = data.data.filter((campaign) => {
+          const isValid = campaign && campaign.name && campaign.status && campaign.recipients !== undefined;
+          if (!isValid) {
+            console.warn("Invalid campaign object:", campaign);
+          }
+          return isValid;
+        });
+
+        setCampaigns(validCampaigns);
+        console.log("Valid campaigns set successfully:", validCampaigns); // Log valid campaigns
       } else {
         console.error("API Error: ", data);
         toast.error("Failed to load campaigns");
