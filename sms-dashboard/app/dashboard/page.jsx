@@ -23,6 +23,13 @@ export default function Dashboard() {
 
   // 🔥 NEW STATES
   const [result, setResult] = useState(null);
+  const [userCounts, setUserCounts] = useState({
+    total_users: 0,
+    opted_in_users: 0,
+    opted_out_users: 0,
+  });
+
+  const { total_users, opted_in_users, opted_out_users } = userCounts;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,8 +53,30 @@ export default function Dashboard() {
     }
   };
 
+  const fetchUserCounts = async () => {
+    try {
+      const res = await fetch(
+        "https://sms-saas-53mg.vercel.app/api/v1/users/counts",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        setUserCounts(data.data);
+      } else {
+        toast.error("Failed to fetch user counts");
+      }
+    } catch {
+      toast.error("Failed to fetch user counts");
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchUserCounts();
   }, []);
 
   // Parse numbers
@@ -141,9 +170,9 @@ export default function Dashboard() {
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {[
-            { title: "Total Users", value: totalUsers },
-            { title: "Opted In", value: optedIn, color: "text-green-500" },
-            { title: "Opted Out", value: optedOut, color: "text-red-500" },
+            { title: "Total Users", value: total_users },
+            { title: "Opted In", value: opted_in_users, color: "text-green-500" },
+            { title: "Opted Out", value: opted_out_users, color: "text-red-500" },
           ].map((stat, i) => (
             <motion.div key={i} whileHover={{ scale: 1.05 }}>
               <Card className="shadow-lg rounded-2xl">

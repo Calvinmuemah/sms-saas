@@ -39,3 +39,16 @@ export const getOptedInUsers = async () => {
 
   return result.rows;
 };
+
+// Get user counts
+export const getUserCounts = async () => {
+  const result = await pool.query(
+    `SELECT 
+      COUNT(*) AS total_users,
+      COUNT(*) FILTER (WHERE opted_in = true) AS opted_in_users,
+      COUNT(*) FILTER (WHERE opted_in = false) AS opted_out_users
+    FROM contacts`
+  );
+
+  return result.rows[0];
+};

@@ -11,6 +11,7 @@ import scheduledRoutes from "./routes/scheduled.routes.js";
 import apiRoutes from "./routes/scheduled.routes.js";
 import profileRoutes from "./routes/scheduled.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/v1/scheduled", scheduledRoutes);
 app.use("/api/v1/api-key", apiRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 
 
 // Health check
