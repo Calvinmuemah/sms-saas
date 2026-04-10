@@ -15,7 +15,7 @@ export default function CampaignsPage() {
   // Fetch campaigns
   const fetchCampaigns = async () => {
     try {
-      const res = await fetch("/api/v1/campaigns");
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns");
       const data = await res.json();
       setCampaigns(data);
     } catch {
@@ -37,7 +37,7 @@ export default function CampaignsPage() {
     try {
       setLoading(true);
 
-      await fetch("/api/v1/campaigns", {
+      await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ name, message }),
@@ -57,7 +57,7 @@ export default function CampaignsPage() {
   // Send campaign
   const handleSend = async (id) => {
     try {
-      await fetch(`/api/v1/campaigns/${id}/send`, {
+      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/campaigns/${id}/send`, {
         method: "POST",
       });
 
