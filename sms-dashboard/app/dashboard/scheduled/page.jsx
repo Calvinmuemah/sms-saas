@@ -17,7 +17,7 @@ export default function ScheduledPage() {
 
   const fetchSchedules = async () => {
     try {
-      const res = await fetch("/api/v1/scheduled");
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled");
       const data = await res.json();
       setSchedules(data);
     } catch {
@@ -27,7 +27,7 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch("/api/v1/recipients");
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients"); // Correct endpoint for fetching recipients
       const data = await res.json();
       setExistingRecipients(data);
     } catch {
@@ -62,7 +62,7 @@ export default function ScheduledPage() {
     try {
       setLoading(true);
 
-      await fetch("/api/v1/scheduled", {
+      await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, scheduledAt: date, recipients }),
@@ -82,7 +82,7 @@ export default function ScheduledPage() {
 
   const handleCancel = async (id) => {
     try {
-      await fetch(`/api/v1/scheduled/${id}`, {
+      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/scheduled/${id}`, {
         method: "DELETE",
       });
 
