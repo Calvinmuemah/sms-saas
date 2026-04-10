@@ -32,7 +32,11 @@ export const updateRecipient = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, numbers } = req.body;
-    const updatedGroup = await updateRecipientGroup(id, name, numbers);
+
+    // Ensure numbers is stored as a string
+    const numbersString = Array.isArray(numbers) ? numbers.join(',') : numbers;
+
+    const updatedGroup = await updateRecipientGroup(id, name, numbersString);
     res.status(200).json({ success: true, data: updatedGroup });
   } catch (error) {
     console.error("Error updating recipient group:", error);

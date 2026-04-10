@@ -5,31 +5,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [recipient, setRecipient] = useState(""); // New state for recipient
+  const [recipients, setRecipients] = useState([]); // State to store recipients
   const [loading, setLoading] = useState(false);
 
-  // Fetch campaigns
-  const fetchCampaigns = async () => {
+  // Fetch recipients
+  const fetchRecipients = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns");
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients");
       const data = await res.json();
-      setCampaigns(data);
+      if (data.success) {
+        setRecipients(data.data);
+      } else {
+        toast.error("Failed to load recipients");
+      }
     } catch {
-      toast.error("Failed to load campaigns");
+      toast.error("Failed to load recipients");
     }
   };
 
   useEffect(() => {
     fetchCampaigns();
+    fetchRecipients(); // Fetch recipients on page load
   }, []);
 
   // Create campaign
   const handleCreate = async () => {
-    if (!name || !message) {
+    if (!name || !message || !recipient) {
       toast.warning("Fill all fields");
       return;
     }
@@ -39,13 +47,14 @@ export default function CampaignsPage() {
 
       await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ name, message }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message, recipient }),
       });
 
       toast.success("Campaign created");
       setName("");
       setMessage("");
+      setRecipient("");
       fetchCampaigns();
     } catch {
       toast.error("Failed to create campaign");
@@ -78,23 +87,39 @@ export default function CampaignsPage() {
 
       {/* Create Campaign */}
       <Card className="shadow-xl rounded-2xl">
-        <CardContent className="p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Create Campaign</h2>
-
+        <CardContent className="space-y-4">
           <Input
             placeholder="Campaign Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
+          <Select onValueChange={(value) => setRecipient(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Recipient Group" />
+            </SelectTrigger>
+            <SelectContent>
+              {recipients.map((group) => (
+                <SelectItem key={group.id} value={group.id}>
+                  {group.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           <textarea
             placeholder="Message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full p-4 rounded-lg border dark:bg-gray-800"
+            className="w-full p-4 rounded-lg border"
+            rows={4}
           />
 
-          <Button onClick={handleCreate} disabled={loading}>
+          <Button
+            onClick={handleCreate}
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700"
+          >
             {loading ? "Creating..." : "Create Campaign"}
           </Button>
         </CardContent>
