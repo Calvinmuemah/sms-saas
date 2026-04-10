@@ -29,8 +29,10 @@ export default function ScheduledPage() {
     try {
       const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients");
       const data = await res.json();
+      console.log("Recipients API Response:", data); // Debugging log
       setExistingRecipients(Array.isArray(data) ? data : []); // Ensure data is an array
-    } catch {
+    } catch (error) {
+      console.error("Error fetching recipients:", error); // Log errors
       toast.error("Failed to load recipients");
     }
   };
@@ -62,13 +64,15 @@ export default function ScheduledPage() {
     try {
       setLoading(true);
 
+      const formattedDate = new Date(date).toISOString(); // Ensure ISO format
+
       await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, scheduledAt: date, recipients }),
+        body: JSON.stringify({ message, scheduledAt: formattedDate, recipients }),
       });
 
-      toast.success("Scheduled successfully 0");
+      toast.success("Scheduled successfully 0");
       setMessage("");
       setDate("");
       setRecipients([]);
