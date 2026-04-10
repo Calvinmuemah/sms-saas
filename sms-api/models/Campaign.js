@@ -1,11 +1,11 @@
 import { pool } from "../config/db.js";
 
-export const createCampaign = async ({ name, message }) => {
+export const createCampaign = async ({ name, message, recipient }) => {
   const { rows } = await pool.query(
-    `INSERT INTO campaigns (name, message)
-     VALUES ($1, $2)
+    `INSERT INTO campaigns (name, message, recipient)
+     VALUES ($1, $2, $3)
      RETURNING *`,
-    [name, message]
+    [name, message, recipient]
   );
   return rows[0];
 };
