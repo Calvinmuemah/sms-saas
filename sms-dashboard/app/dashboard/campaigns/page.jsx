@@ -20,8 +20,10 @@ export default function CampaignsPage() {
     try {
       const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/campaigns");
       const data = await res.json();
+      console.log("API Response for campaigns:", data); // Log the API response
       if (data.success) {
         setCampaigns(data.data);
+        console.log("Campaigns set successfully:", data.data); // Log the campaigns being set
       } else {
         console.error("API Error: ", data);
         toast.error("Failed to load campaigns");
