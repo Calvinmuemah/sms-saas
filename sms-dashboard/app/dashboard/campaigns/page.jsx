@@ -158,29 +158,28 @@ export default function CampaignsPage() {
             </thead>
 
             <tbody>
-              {campaigns.map((c) => (
-                <tr key={c._id} className="border-b hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <td className="py-2">{c.name}</td>
-
-                  <td>
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      c.status === "sent"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-yellow-100 text-yellow-600"
-                    }`}>
-                      {c.status}
-                    </span>
-                  </td>
-
-                  <td>{c.recipients > 0 ? c.recipients : "No recipients"}</td>
-
-                  <td>
-                    <Button size="sm" onClick={() => handleSend(c._id)}>
-                      Send
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+              {campaigns
+                .filter((c) => c.name && c.status && c.recipients !== undefined) // Validate campaign data
+                .map((c) => (
+                  <tr key={c._id} className="border-b hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <td className="py-2">{c.name}</td>
+                    <td>
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        c.status === "sent"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-yellow-100 text-yellow-600"
+                      }`}>
+                        {c.status}
+                      </span>
+                    </td>
+                    <td>{c.recipients > 0 ? c.recipients : "No recipients"}</td>
+                    <td>
+                      <Button size="sm" onClick={() => handleSend(c._id)}>
+                        Send
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </CardContent>
