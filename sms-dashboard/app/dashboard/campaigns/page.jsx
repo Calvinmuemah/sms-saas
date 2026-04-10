@@ -23,9 +23,11 @@ export default function CampaignsPage() {
       if (data.success) {
         setCampaigns(data.data);
       } else {
+        console.error("API Error: ", data);
         toast.error("Failed to load campaigns");
       }
-    } catch {
+    } catch (error) {
+      console.error("Fetch Error: ", error);
       toast.error("Failed to load campaigns");
     }
   };
@@ -89,21 +91,6 @@ export default function CampaignsPage() {
       fetchCampaigns();
     } catch {
       toast.error("Failed to send campaign");
-    }
-  };
-
-  // Update recipient
-  const handleUpdateRecipient = async (id, updatedData) => {
-    try {
-      await fetch(`/api/v1/recipients/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
-      toast.success("Recipient updated successfully");
-      fetchRecipients(); // Refresh the recipient list
-    } catch {
-      toast.error("Failed to update recipient");
     }
   };
 

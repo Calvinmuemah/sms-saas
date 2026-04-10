@@ -68,6 +68,22 @@ export default function RecipientsPage() {
     }
   };
 
+  // Update recipient group
+  const handleUpdate = async (id, updatedData) => {
+    try {
+      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/recipients/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+
+      toast.success("Recipient group updated");
+      fetchRecipients();
+    } catch {
+      toast.error("Failed to update recipient group");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -119,6 +135,9 @@ export default function RecipientsPage() {
                   <td className="py-2">{r.name}</td>
                   <td>{r.numbers.join(", ")}</td>
                   <td>
+                    <Button size="sm" onClick={() => handleUpdate(r.id, { name: r.name, numbers: r.numbers })}>
+                      Update
+                    </Button>
                     <Button size="sm" onClick={() => handleDelete(r.id)}>
                       Delete
                     </Button>
