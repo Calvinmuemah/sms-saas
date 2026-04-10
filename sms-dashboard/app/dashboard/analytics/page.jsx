@@ -27,6 +27,7 @@ ChartJS.register(
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
+  const [messageStats, setMessageStats] = useState({ totalSMS: 0, delivered: 0, failed: 0 });
 
   const fetchAnalytics = async () => {
     try {
@@ -40,6 +41,31 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     fetchAnalytics();
+  }, []);
+
+  useEffect(() => {
+    const fetchMessageStats = async () => {
+      try {
+        const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/messages");
+        if (!res.ok) {
+          throw new Error("Failed to fetch message stats");
+        }
+        const data = await res.json();
+        if (data.success && Array.isArray(data.messages)) {
+          setMessageStats({
+            totalSMS: data.messages.length,
+            delivered: data.messages.filter((m) => m.status === "Success").length,
+            failed: data.messages.filter((m) => m.status !== "Success").length,
+          });
+        } else {
+          throw new Error("Unexpected data format");
+        }
+      } catch (error) {
+        console.error("Error fetching message stats:", error);
+      }
+    };
+
+    fetchMessageStats();
   }, []);
 
   if (!data) return <p>Loading...</p>;
@@ -83,18 +109,42 @@ export default function AnalyticsPage() {
       <div className="grid md:grid-cols-3 gap-6">
         <Card><CardContent className="p-6">
           <p>Total SMS</p>
-          <h2 className="text-3xl font-bold">{data.totalSMS}</h2>
+          <h2 className="text-3xl font-bold">{messageStats.totalSMS}</h2>
         </CardContent></Card>
 
         <Card><CardContent className="p-6">
           <p>Delivered</p>
-          <h2 className="text-3xl text-green-500">{data.delivered}</h2>
+          <h2 className="text-3xl text-green-500">{messageStats.delivered}</h2>
         </CardContent></Card>
 
         <Card><CardContent className="p-6">
           <p>Failed</p>
-          <h2 className="text-3xl text-red-500">{data.failed}</h2>
+          <h2 className="text-3xl text-red-500">{messageStats.failed}</h2>
         </CardContent></Card>
+      </div>
+
+      {/* Message Stats */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <p>Total SMS</p>
+            <h2 className="text-3xl font-bold">{messageStats.totalSMS}</h2>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <p>Delivered</p>
+            <h2 className="text-3xl text-green-500">{messageStats.delivered}</h2>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <p>Failed</p>
+            <h2 className="text-3xl text-red-500">{messageStats.failed}</h2>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Charts */}
