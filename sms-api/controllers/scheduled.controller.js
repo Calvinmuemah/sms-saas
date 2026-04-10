@@ -5,7 +5,11 @@ export const getAll = async (req, res) => {
 };
 
 export const create = async (req, res) => {
-  res.json(await service.create(req.body));
+  const { message, scheduledAt, recipients } = req.body;
+  if (!message || !scheduledAt || !recipients) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  res.json(await service.create({ message, scheduledAt, recipients }));
 };
 
 export const remove = async (req, res) => {

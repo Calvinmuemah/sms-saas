@@ -10,6 +10,8 @@ export default function ScheduledPage() {
   const [schedules, setSchedules] = useState([]);
   const [message, setMessage] = useState("");
   const [date, setDate] = useState("");
+  const [recipients, setRecipients] = useState([]); // New state for recipients
+  const [manualRecipient, setManualRecipient] = useState(""); // For manual input
   const [loading, setLoading] = useState(false);
 
   const fetchSchedules = async () => {
@@ -26,9 +28,16 @@ export default function ScheduledPage() {
     fetchSchedules();
   }, []);
 
+  const handleAddRecipient = () => {
+    if (manualRecipient) {
+      setRecipients([...recipients, manualRecipient]);
+      setManualRecipient("");
+    }
+  };
+
   const handleSchedule = async () => {
-    if (!message || !date) {
-      toast.warning("Fill all fields");
+    if (!message || !date || recipients.length === 0) {
+      toast.warning("Fill all fields and add at least one recipient");
       return;
     }
 
@@ -37,13 +46,14 @@ export default function ScheduledPage() {
 
       await fetch("/api/v1/scheduled", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ message, scheduledAt: date }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, scheduledAt: date, recipients }),
       });
 
-      toast.success("Scheduled successfully ⏰");
+      toast.success("Scheduled successfully 0");
       setMessage("");
       setDate("");
+      setRecipients([]);
       fetchSchedules();
     } catch {
       toast.error("Failed to schedule");
@@ -73,61 +83,63 @@ export default function ScheduledPage() {
         <p className="text-gray-500">Plan messages for later delivery</p>
       </div>
 
-      {/* Create */}
       <Card className="shadow-xl rounded-2xl">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-xl font-semibold">Schedule Message</h2>
-
           <textarea
             placeholder="Message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             className="w-full p-4 rounded-lg border dark:bg-gray-800"
           />
-
           <Input
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
-
+          <div>
+            <h3 className="text-lg font-medium">Recipients</h3>
+            <ul>
+              {recipients.map((r, index) => (
+                <li key={index}>{r}</li>
+              ))}
+            </ul>
+            <div className="flex space-x-2">
+              <Input
+                type="text"
+                placeholder="Add recipient"
+                value={manualRecipient}
+                onChange={(e) => setManualRecipient(e.target.value)}
+              />
+              <Button onClick={handleAddRecipient}>Add</Button>
+            </div>
+          </div>
           <Button onClick={handleSchedule} disabled={loading}>
             {loading ? "Scheduling..." : "Schedule"}
           </Button>
         </CardContent>
       </Card>
 
-      {/* List */}
       <Card className="shadow-xl rounded-2xl">
         <CardContent className="p-6">
           <h2 className="text-xl font-semibold mb-4">Upcoming Messages</h2>
-
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
                 <th>Message</th>
                 <th>Date</th>
-                <th>Status</th>
+                <th>Recipients</th>
                 <th></th>
               </tr>
             </thead>
-
             <tbody>
               {schedules.map((s) => (
                 <tr key={s._id} className="border-b">
                   <td>{s.message}</td>
                   <td>{new Date(s.scheduledAt).toLocaleString()}</td>
-
+                  <td>{s.recipients.join(", ")}</td>
                   <td>
-                    <span className="text-yellow-500 text-xs">
-                      {s.status || "pending"}
-                    </span>
-                  </td>
-
-                  <td>
-                    <Button size="sm" onClick={() => handleCancel(s._id)}>
-                      Cancel
-                    </Button>
+                    <Button onClick={() => handleCancel(s._id)}>Cancel</Button>
                   </td>
                 </tr>
               ))}

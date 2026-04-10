@@ -7,10 +7,10 @@ export const getAll = async () => {
   return rows;
 };
 
-export const create = async ({ message, scheduledAt }) => {
+export const create = async ({ message, scheduledAt, recipients }) => {
   const { rows } = await pool.query(
-    "INSERT INTO scheduled(message, scheduled_at) VALUES($1,$2) RETURNING *",
-    [message, scheduledAt]
+    "INSERT INTO scheduled(message, scheduled_at, recipients) VALUES($1, $2, $3) RETURNING *",
+    [message, scheduledAt, JSON.stringify(recipients)]
   );
   return rows[0];
 };
