@@ -10,8 +10,9 @@ export default function ScheduledPage() {
   const [schedules, setSchedules] = useState([]);
   const [message, setMessage] = useState("");
   const [date, setDate] = useState("");
-  const [recipients, setRecipients] = useState([]); // New state for recipients
+  const [recipients, setRecipients] = useState([]); // Selected recipients
   const [manualRecipient, setManualRecipient] = useState(""); // For manual input
+  const [existingRecipients, setExistingRecipients] = useState([]); // Existing recipients
   const [loading, setLoading] = useState(false);
 
   const fetchSchedules = async () => {
@@ -24,14 +25,31 @@ export default function ScheduledPage() {
     }
   };
 
+  const fetchExistingRecipients = async () => {
+    try {
+      const res = await fetch("/api/v1/recipients");
+      const data = await res.json();
+      setExistingRecipients(data);
+    } catch {
+      toast.error("Failed to load recipients");
+    }
+  };
+
   useEffect(() => {
     fetchSchedules();
+    fetchExistingRecipients();
   }, []);
 
   const handleAddRecipient = () => {
     if (manualRecipient) {
       setRecipients([...recipients, manualRecipient]);
       setManualRecipient("");
+    }
+  };
+
+  const handleSelectRecipient = (recipient) => {
+    if (!recipients.includes(recipient)) {
+      setRecipients([...recipients, recipient]);
     }
   };
 
@@ -107,11 +125,24 @@ export default function ScheduledPage() {
             <div className="flex space-x-2">
               <Input
                 type="text"
-                placeholder="Add recipient"
+                placeholder="Add recipient manually"
                 value={manualRecipient}
                 onChange={(e) => setManualRecipient(e.target.value)}
               />
               <Button onClick={handleAddRecipient}>Add</Button>
+            </div>
+            <div>
+              <h4 className="text-md font-medium mt-4">Select from existing recipients</h4>
+              <ul>
+                {existingRecipients.map((recipient) => (
+                  <li key={recipient.id} className="flex items-center space-x-2">
+                    <span>{recipient.phone}</span>
+                    <Button onClick={() => handleSelectRecipient(recipient.phone)}>
+                      Add
+                    </Button>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
           <Button onClick={handleSchedule} disabled={loading}>
