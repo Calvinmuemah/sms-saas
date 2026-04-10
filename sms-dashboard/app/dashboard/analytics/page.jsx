@@ -66,6 +66,14 @@ export default function AnalyticsPage() {
     ],
   };
 
+  const userStats = data.userStats;
+
+  const userStatsData = [
+    { title: "Total Users", value: userStats.totalUsers },
+    { title: "Opted In", value: userStats.optedInUsers, color: "text-green-500" },
+    { title: "Opted Out", value: userStats.optedOutUsers, color: "text-red-500" },
+  ];
+
   return (
     <div className="space-y-6">
 
@@ -106,6 +114,32 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
+      </div>
+
+      {/* User Stats */}
+      <div className="mt-6">
+        <h2 className="mb-4">User Statistics</h2>
+        <ul>
+          {userStatsData.map((item, index) => (
+            <li key={index}>
+              <p>{item.title}: {item.value}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* User Stats Grid */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {userStatsData.map((stat, i) => (
+          <Card key={i}>
+            <CardContent className="p-6">
+              <p>{stat.title}</p>
+              <h2 className={`text-3xl font-bold ${stat.color || ""}`}>
+                {stat.value}
+              </h2>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
