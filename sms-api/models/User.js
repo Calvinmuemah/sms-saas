@@ -52,3 +52,9 @@ export const getUserCounts = async () => {
 
   return result.rows[0];
 };
+
+// Fetch all users
+export const getAllUsers = async () => {
+  const result = await pool.query("SELECT phone, opted_in FROM contacts");
+  return result.rows;
+};

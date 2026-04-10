@@ -10,9 +10,23 @@ export default function UsersPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("https://sms-saas-53mg.vercel.app/api/v1/users")
-      .then(res => res.json())
-      .then(setUsers);
+    fetch("https://sms-saas-53mg.vercel.app/api/v1/users/all")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch users");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.success && Array.isArray(data.data)) {
+          setUsers(data.data);
+        } else {
+          throw new Error("Unexpected data format");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching users:", err);
+      });
   }, []);
 
   const filteredUsers = users.filter(u =>

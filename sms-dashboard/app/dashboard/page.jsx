@@ -52,7 +52,6 @@ export default function Dashboard() {
   //     toast.error("Failed to load users");
   //   }
   // };
-
   const fetchUserCounts = async () => {
     try {
       const res = await fetch(
