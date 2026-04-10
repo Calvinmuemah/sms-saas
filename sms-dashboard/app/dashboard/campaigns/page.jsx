@@ -92,6 +92,21 @@ export default function CampaignsPage() {
     }
   };
 
+  // Update recipient
+  const handleUpdateRecipient = async (id, updatedData) => {
+    try {
+      await fetch(`/api/v1/recipients/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+      toast.success("Recipient updated successfully");
+      fetchRecipients(); // Refresh the recipient list
+    } catch {
+      toast.error("Failed to update recipient");
+    }
+  };
+
   return (
     <div className="space-y-6">
 
