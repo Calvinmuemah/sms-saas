@@ -30,7 +30,7 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch("/api/v1/analytics");
+      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/analytics");
       const json = await res.json();
       setData(json);
     } catch {
