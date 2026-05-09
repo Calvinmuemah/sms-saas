@@ -21,9 +21,15 @@ export default function DashboardNavbar() {
   }, []);
 
   const handleLogout = () => {
+    // clear all auth data
     localStorage.removeItem("auth");
     localStorage.removeItem("token");
-    router.push("/auth/login");
+
+    // reset state
+    setUser(null);
+
+    // IMPORTANT: replace instead of push (prevents back navigation)
+    router.replace("/auth/login");
   };
 
   return (
@@ -41,7 +47,7 @@ export default function DashboardNavbar() {
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-6">
 
-          {/* LINKS MOVED TO RIGHT SIDE */}
+          {/* LINKS */}
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/about" className="hover:text-green-600 transition">
               About
@@ -74,11 +80,11 @@ export default function DashboardNavbar() {
 
             </Button>
 
-            {/* DROPDOWN (SIMPLIFIED) */}
+            {/* DROPDOWN */}
             {open && (
               <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 shadow-xl rounded-2xl border overflow-hidden">
 
-                {/* USER INFO ONLY */}
+                {/* USER INFO */}
                 <div className="p-4 border-b">
                   <p className="font-semibold">
                     {user?.name || "Guest"}
@@ -88,7 +94,7 @@ export default function DashboardNavbar() {
                   </p>
                 </div>
 
-                {/* LOGOUT ONLY */}
+                {/* LOGOUT */}
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-red-500"
