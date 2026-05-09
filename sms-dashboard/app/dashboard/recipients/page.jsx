@@ -45,8 +45,7 @@ export default function RecipientsPage() {
   }, []);
 
   const totalContacts = useMemo(
-    () =>
-      recipients.reduce((a, r) => a + (r.numbers?.length || 0), 0),
+    () => recipients.reduce((a, r) => a + (r.numbers?.length || 0), 0),
     [recipients]
   );
 
@@ -59,11 +58,6 @@ export default function RecipientsPage() {
         )
     );
   }, [search, recipients]);
-
-  const resetForm = () => {
-    setName("");
-    setNumbers("");
-  };
 
   const handleCreate = async () => {
     if (!name || !numbers) return toast.warning("Fill all fields");
@@ -85,7 +79,8 @@ export default function RecipientsPage() {
 
       toast.success("Group created");
       setShowCreate(false);
-      resetForm();
+      setName("");
+      setNumbers("");
       fetchRecipients();
     } catch {
       toast.error("Create failed");
@@ -106,8 +101,6 @@ export default function RecipientsPage() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!editing) return;
-
     try {
       await fetch(`${API}/${editing.id}`, {
         method: "PUT",
@@ -124,44 +117,70 @@ export default function RecipientsPage() {
   };
 
   return (
-    <div className="space-y-8 px-4 md:px-6">
+    <div className="space-y-6 px-3 md:px-4">
 
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 className="text-4xl font-black">Recipients</h1>
+        <p className="text-gray-500 mt-1 text-sm">
+          Manage groups & contacts
+        </p>
+      </div>
 
-        <div>
-          <h1 className="text-4xl font-black">Recipients</h1>
-          <p className="text-gray-500 mt-2">
-            Manage recipient groups and contacts
-          </p>
+      {/* STATS */}
+      <div className="grid md:grid-cols-2 gap-4">
+
+        <Card className="rounded-3xl shadow-xl border-0">
+          <CardContent className="p-5 flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500">Groups</p>
+              <h2 className="text-3xl font-black">{recipients.length}</h2>
+            </div>
+            <Users className="text-green-600" size={28} />
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl shadow-xl border-0">
+          <CardContent className="p-5 flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500">Contacts</p>
+              <h2 className="text-3xl font-black">{totalContacts}</h2>
+            </div>
+            <Phone className="text-green-600" size={28} />
+          </CardContent>
+        </Card>
+
+      </div>
+
+      {/* ACTIONS (NOW BELOW STATS) */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+        <div className="relative w-full md:w-[260px]">
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+            className="h-10 pl-10 rounded-xl"
+          />
         </div>
 
-        <div className="flex gap-3 flex-wrap">
-
-          <div className="relative">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
-              className="h-11 pl-11 rounded-xl w-[240px]"
-            />
-          </div>
+        <div className="flex gap-2">
 
           <Button
             onClick={() => setShowCreate(true)}
-            className="bg-green-600 hover:bg-green-700 h-11 rounded-xl"
+            className="bg-green-600 hover:bg-green-700 h-10 rounded-xl"
           >
-            <Plus size={18} className="mr-2" />
+            <Plus size={16} className="mr-1" />
             Create
           </Button>
 
           <Button
             onClick={fetchRecipients}
             variant="outline"
-            className="h-11 rounded-xl"
+            className="h-10 rounded-xl"
           >
-            <RefreshCw size={16} className="mr-2" />
+            <RefreshCw size={16} className="mr-1" />
             Refresh
           </Button>
 
@@ -169,109 +188,90 @@ export default function RecipientsPage() {
 
       </div>
 
-      {/* STATS */}
-      <div className="grid md:grid-cols-2 gap-5">
-
-        <Card className="rounded-3xl shadow-xl border-0">
-          <CardContent className="p-6 flex justify-between items-center">
-            <div>
-              <p className="text-gray-500 text-sm">Groups</p>
-              <h2 className="text-3xl font-black">{recipients.length}</h2>
-            </div>
-            <Users className="text-green-600" size={30} />
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl shadow-xl border-0">
-          <CardContent className="p-6 flex justify-between items-center">
-            <div>
-              <p className="text-gray-500 text-sm">Contacts</p>
-              <h2 className="text-3xl font-black">{totalContacts}</h2>
-            </div>
-            <Phone className="text-green-600" size={30} />
-          </CardContent>
-        </Card>
-
-      </div>
-
       {/* TABLE */}
       <Card className="rounded-3xl shadow-2xl border-0 overflow-hidden">
         <CardContent className="p-0">
 
-          <div className="p-5 border-b bg-green-50">
-            <h2 className="text-xl font-bold">Groups</h2>
-            <p className="text-sm text-gray-500">All recipient groups</p>
+          <div className="p-4 border-b bg-green-50">
+            <h2 className="font-bold">Groups</h2>
           </div>
 
-          {filtered.length === 0 ? (
-            <div className="py-20 text-center text-gray-500">
-              No data found
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
+          <div className="overflow-x-auto">
 
-              <table className="w-full min-w-[700px]">
+            <table className="w-full min-w-[650px] text-sm">
 
-                <thead>
-                  <tr className="text-left border-b">
-                    <th className="p-4">Name</th>
-                    <th className="p-4">Numbers</th>
-                    <th className="p-4">Count</th>
-                    <th className="p-4">Actions</th>
-                  </tr>
-                </thead>
+              <thead>
+                <tr className="text-left border-b bg-white">
+                  <th className="p-3">#</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Numbers</th>
+                  <th className="p-3">Count</th>
+                  <th className="p-3">Actions</th>
+                </tr>
+              </thead>
 
-                <tbody>
-                  {filtered.map((r) => (
-                    <tr key={r.id} className="border-b hover:bg-green-50">
+              <tbody>
 
-                      <td className="p-4 font-semibold">{r.name}</td>
+                {filtered.map((r, i) => (
+                  <tr key={r.id} className="border-b hover:bg-green-50">
 
-                      <td className="p-4 flex gap-2 flex-wrap">
-                        {r.numbers?.slice(0, 3).map((n, i) => (
-                          <span key={i} className="bg-gray-100 px-3 py-1 rounded-full text-xs">
-                            {n}
-                          </span>
-                        ))}
-                      </td>
+                    {/* NUMBERING */}
+                    <td className="p-3 font-bold text-gray-500">
+                      {i + 1}
+                    </td>
 
-                      <td className="p-4">
-                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
-                          {r.numbers?.length || 0}
+                    <td className="p-3 font-semibold">{r.name}</td>
+
+                    <td className="p-3 flex gap-2 flex-wrap">
+                      {r.numbers?.slice(0, 2).map((n, idx) => (
+                        <span key={idx} className="bg-gray-100 px-2 py-1 rounded-full text-xs">
+                          {n}
                         </span>
-                      </td>
+                      ))}
+                      {r.numbers?.length > 2 && (
+                        <span className="text-green-600 text-xs font-semibold">
+                          +{r.numbers.length - 2}
+                        </span>
+                      )}
+                    </td>
 
-                      <td className="p-4 flex gap-2">
+                    <td className="p-3">
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
+                        {r.numbers?.length || 0}
+                      </span>
+                    </td>
 
-                        <button
-                          onClick={() => setEditing(r)}
-                          className="bg-blue-500 text-white px-3 py-2 rounded-xl"
-                        >
-                          <Pencil size={14} />
-                        </button>
+                    <td className="p-3 flex gap-2">
 
-                        <button
-                          onClick={() => handleDelete(r.id)}
-                          className="bg-red-500 text-white px-3 py-2 rounded-xl"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                      <button
+                        onClick={() => setEditing(r)}
+                        className="bg-blue-500 text-white px-2 py-1 rounded-lg"
+                      >
+                        <Pencil size={14} />
+                      </button>
 
-                      </td>
+                      <button
+                        onClick={() => handleDelete(r.id)}
+                        className="bg-red-500 text-white px-2 py-1 rounded-lg"
+                      >
+                        <Trash2 size={14} />
+                      </button>
 
-                    </tr>
-                  ))}
-                </tbody>
+                    </td>
 
-              </table>
+                  </tr>
+                ))}
 
-            </div>
-          )}
+              </tbody>
+
+            </table>
+
+          </div>
 
         </CardContent>
       </Card>
 
-      {/* CREATE MODAL */}
+      {/* MODALS (UNCHANGED LOGIC, KEEP SIMPLE) */}
       {showCreate && (
         <Modal title="Create Group" onClose={() => setShowCreate(false)}>
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Group name" />
@@ -279,22 +279,21 @@ export default function RecipientsPage() {
             value={numbers}
             onChange={(e) => setNumbers(e.target.value)}
             className="w-full border p-3 rounded-xl mt-3"
-            rows={5}
-            placeholder="Numbers separated by comma or new line"
+            rows={4}
+            placeholder="Numbers"
           />
 
-          <div className="flex justify-end gap-3 mt-4">
-            <Button onClick={() => setShowCreate(false)} variant="outline">
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setShowCreate(false)}>
               Cancel
             </Button>
-            <Button onClick={handleCreate} disabled={loading} className="bg-green-600">
+            <Button onClick={handleCreate} className="bg-green-600">
               Create
             </Button>
           </div>
         </Modal>
       )}
 
-      {/* EDIT MODAL */}
       {editing && (
         <Modal title="Edit Group" onClose={() => setEditing(null)}>
           <form onSubmit={handleUpdate} className="space-y-3">
@@ -315,11 +314,11 @@ export default function RecipientsPage() {
                 })
               }
               className="w-full border p-3 rounded-xl"
-              rows={5}
+              rows={4}
             />
 
-            <div className="flex justify-end gap-3">
-              <Button type="button" onClick={() => setEditing(null)} variant="outline">
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setEditing(null)}>
                 Cancel
               </Button>
               <Button type="submit" className="bg-green-600">
@@ -335,16 +334,14 @@ export default function RecipientsPage() {
   );
 }
 
-/* SIMPLE MODAL */
+/* MODAL */
 function Modal({ title, children, onClose }) {
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-xl rounded-3xl p-6 space-y-4">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3">
+      <div className="bg-white w-full max-w-lg rounded-2xl p-5 space-y-3">
         <div className="flex justify-between">
-          <h2 className="text-xl font-bold">{title}</h2>
-          <button onClick={onClose}>
-            <X />
-          </button>
+          <h2 className="font-bold text-lg">{title}</h2>
+          <button onClick={onClose}><X /></button>
         </div>
         {children}
       </div>
