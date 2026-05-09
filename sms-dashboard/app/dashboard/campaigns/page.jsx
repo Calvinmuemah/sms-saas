@@ -6,6 +6,7 @@ import {
   Send,
   RefreshCw,
   Search,
+  X,
 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +31,10 @@ export default function CampaignsPage() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [recipient, setRecipient] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const [search, setSearch] = useState("");
 
   const fetchCampaigns = async () => {
@@ -64,6 +68,12 @@ export default function CampaignsPage() {
     );
   }, [search, campaigns]);
 
+  const resetForm = () => {
+    setName("");
+    setMessage("");
+    setRecipient("");
+  };
+
   const handleCreate = async () => {
     if (!name || !message || !recipient)
       return toast.warning("Fill all fields");
@@ -78,9 +88,8 @@ export default function CampaignsPage() {
       });
 
       toast.success("Campaign created");
-      setName("");
-      setMessage("");
-      setRecipient("");
+      setShowModal(false);
+      resetForm();
       fetchCampaigns();
     } catch {
       toast.error("Failed to create campaign");
@@ -109,14 +118,14 @@ export default function CampaignsPage() {
       <div>
         <h1 className="text-4xl font-black">Campaigns</h1>
         <p className="text-gray-500 mt-1">
-          Create and manage SMS campaigns
+          Manage and send SMS campaigns
         </p>
       </div>
 
       {/* STATS */}
       <div className="grid md:grid-cols-2 gap-4">
 
-        <Card className="rounded-3xl border-0 shadow-xl">
+        <Card className="rounded-3xl shadow-xl border-0">
           <CardContent className="p-5 flex justify-between items-center">
             <div>
               <p className="text-sm text-gray-500">Total Campaigns</p>
@@ -126,7 +135,7 @@ export default function CampaignsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl border-0 shadow-xl">
+        <Card className="rounded-3xl shadow-xl border-0">
           <CardContent className="p-5 flex justify-between items-center">
             <div>
               <p className="text-sm text-gray-500">Recipients</p>
@@ -138,53 +147,8 @@ export default function CampaignsPage() {
 
       </div>
 
-      {/* CREATE CAMPAIGN */}
-      <Card className="rounded-3xl shadow-xl border-0">
-        <CardContent className="space-y-4 p-5">
-
-          <h2 className="font-bold text-lg">Create Campaign</h2>
-
-          <Input
-            placeholder="Campaign name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="h-11 rounded-xl"
-          />
-
-          <Select onValueChange={setRecipient}>
-            <SelectTrigger className="h-11 rounded-xl">
-              <SelectValue placeholder="Select recipient group" />
-            </SelectTrigger>
-            <SelectContent>
-              {recipients.map((g) => (
-                <SelectItem key={g.id} value={g.id}>
-                  {g.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows={4}
-            placeholder="Message..."
-            className="w-full border rounded-xl p-3"
-          />
-
-          <Button
-            onClick={handleCreate}
-            disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 h-11 rounded-xl"
-          >
-            {loading ? "Creating..." : "Create Campaign"}
-          </Button>
-
-        </CardContent>
-      </Card>
-
-      {/* SEARCH + REFRESH */}
-      <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+      {/* ACTION BAR */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
         <div className="relative w-full md:w-[260px]">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -196,17 +160,28 @@ export default function CampaignsPage() {
           />
         </div>
 
-        <Button
-          onClick={() => {
-            fetchCampaigns();
-            fetchRecipients();
-          }}
-          variant="outline"
-          className="h-10 rounded-xl"
-        >
-          <RefreshCw size={16} className="mr-2" />
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+
+          <Button
+            onClick={() => setShowModal(true)}
+            className="bg-green-600 hover:bg-green-700 h-10 rounded-xl"
+          >
+            + Create Campaign
+          </Button>
+
+          <Button
+            onClick={() => {
+              fetchCampaigns();
+              fetchRecipients();
+            }}
+            variant="outline"
+            className="h-10 rounded-xl"
+          >
+            <RefreshCw size={16} className="mr-2" />
+            Refresh
+          </Button>
+
+        </div>
 
       </div>
 
@@ -240,25 +215,19 @@ export default function CampaignsPage() {
                       {i + 1}
                     </td>
 
-                    <td className="p-3 font-semibold">
-                      {c.name}
-                    </td>
+                    <td className="p-3 font-semibold">{c.name}</td>
 
                     <td className="p-3">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          c.status === "sent"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                      >
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        c.status === "sent"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}>
                         {c.status}
                       </span>
                     </td>
 
-                    <td className="p-3">
-                      {c.recipients || 0}
-                    </td>
+                    <td className="p-3">{c.recipients || 0}</td>
 
                     <td className="p-3">
                       <Button
@@ -280,6 +249,74 @@ export default function CampaignsPage() {
 
         </CardContent>
       </Card>
+
+      {/* CREATE MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3 z-50">
+
+          <div className="bg-white w-full max-w-lg rounded-2xl p-5 space-y-4 animate-in fade-in zoom-in-95">
+
+            {/* HEADER */}
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold">Create Campaign</h2>
+              <button onClick={() => setShowModal(false)}>
+                <X />
+              </button>
+            </div>
+
+            {/* FORM */}
+            <Input
+              placeholder="Campaign name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-11 rounded-xl"
+            />
+
+            <Select onValueChange={setRecipient}>
+              <SelectTrigger className="h-11 rounded-xl">
+                <SelectValue placeholder="Select recipient group" />
+              </SelectTrigger>
+              <SelectContent>
+                {recipients.map((g) => (
+                  <SelectItem key={g.id} value={g.id}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={4}
+              placeholder="Message..."
+              className="w-full border rounded-xl p-3"
+            />
+
+            {/* ACTIONS */}
+            <div className="flex justify-end gap-2">
+
+              <Button
+                variant="outline"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                onClick={handleCreate}
+                disabled={loading}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {loading ? "Creating..." : "Create"}
+              </Button>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
 
     </div>
   );
