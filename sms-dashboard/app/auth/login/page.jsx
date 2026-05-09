@@ -24,9 +24,6 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      // console.log("Login Request Payload:", { email, password });
-      // console.log("API URL:", `${API_BASE_URL}/auth/login`);
-
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,12 +31,31 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
-      if (!data.success) throw new Error(data.message || "Login failed. Please try again.");
 
+      if (!data.success) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      // 🔥 STORE TOKEN
       localStorage.setItem("token", data.token);
+
+      // 👤 STORE USER (important upgrade)
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      // 🧠 OPTIONAL: store full auth object (future-proof)
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          token: data.token,
+          user: data.user || null,
+        })
+      );
 
       toast.success("Welcome back 🚀");
       router.push("/dashboard");
+
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -49,8 +65,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen grid md:grid-cols-2">
-      
-      {/* LEFT SIDE (Branding) */}
+
+      {/* LEFT SIDE */}
       <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-green-500 to-teal-600 text-white p-10">
         <div>
           <h1 className="text-4xl font-bold mb-4">SMS SaaS</h1>
@@ -60,8 +76,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* RIGHT SIDE (Form) */}
+      {/* RIGHT SIDE */}
       <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-6">
+
         <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl space-y-6">
 
           <div className="text-center">
@@ -69,7 +86,7 @@ export default function LoginPage() {
             <p className="text-gray-500 text-sm">Login to your account</p>
           </div>
 
-          {/* Email */}
+          {/* EMAIL */}
           <div className="relative">
             <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
             <Input
@@ -81,7 +98,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password */}
+          {/* PASSWORD */}
           <div className="relative">
             <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
             <Input
@@ -93,7 +110,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Forgot Password */}
+          {/* FORGOT */}
           <div className="text-right text-sm">
             <span
               onClick={() => router.push("/auth/forgot-password")}
@@ -103,7 +120,7 @@ export default function LoginPage() {
             </span>
           </div>
 
-          {/* Button */}
+          {/* BUTTON */}
           <Button
             onClick={handleLogin}
             disabled={loading}
@@ -112,7 +129,7 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </Button>
 
-          {/* Register Link */}
+          {/* REGISTER */}
           <p className="text-sm text-center text-gray-500">
             Don’t have an account?{" "}
             <span
@@ -122,8 +139,11 @@ export default function LoginPage() {
               Create account
             </span>
           </p>
+
         </div>
+
       </div>
+
     </div>
   );
 }
