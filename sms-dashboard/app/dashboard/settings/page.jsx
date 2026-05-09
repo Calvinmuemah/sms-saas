@@ -18,10 +18,10 @@ import DashboardLayout from "../../dashboard/layout";
 export default function SettingsPage() {
   return (
     <DashboardLayout>
+
       <div className="min-h-screen bg-gradient-to-br from-white via-green-50/40 to-white text-gray-900">
 
-        {/* REDUCED SIDE MARGINS */}
-        <div className="pt-6 pb-10 px-2 md:px-3">
+        <div className="pt-24 pb-10 px-3 md:px-4">
 
           <div className="max-w-full space-y-8">
 
@@ -54,6 +54,7 @@ export default function SettingsPage() {
               <div className="space-y-6">
 
                 <Card className="rounded-3xl border-0 shadow-xl bg-white overflow-hidden">
+
                   <div className="h-24 bg-gradient-to-r from-green-600 to-emerald-500 relative">
                     <div className="absolute inset-0 bg-black/10" />
                   </div>
@@ -77,18 +78,29 @@ export default function SettingsPage() {
                     <div className="mt-5 space-y-3">
 
                       <div className="flex items-center justify-between bg-green-50 border border-green-100 rounded-2xl px-4 py-3">
-                        <span className="text-sm text-gray-600">Security</span>
-                        <span className="text-sm font-semibold text-green-700">Strong</span>
+                        <span className="text-sm text-gray-600">
+                          Security
+                        </span>
+
+                        <span className="text-sm font-semibold text-green-700">
+                          Strong
+                        </span>
                       </div>
 
                       <div className="flex items-center justify-between bg-gray-50 border rounded-2xl px-4 py-3">
-                        <span className="text-sm text-gray-600">Notifications</span>
-                        <span className="text-sm font-semibold text-gray-900">Enabled</span>
+                        <span className="text-sm text-gray-600">
+                          Notifications
+                        </span>
+
+                        <span className="text-sm font-semibold text-gray-900">
+                          Enabled
+                        </span>
                       </div>
 
                     </div>
 
                   </CardContent>
+
                 </Card>
 
                 <Card className="rounded-3xl border-0 shadow-xl bg-white">
@@ -106,8 +118,13 @@ export default function SettingsPage() {
                           <Bell size={18} className="text-green-600" />
 
                           <div>
-                            <p className="font-medium text-sm">SMS Alerts</p>
-                            <p className="text-xs text-gray-500">Receive delivery updates</p>
+                            <p className="font-medium text-sm">
+                              SMS Alerts
+                            </p>
+
+                            <p className="text-xs text-gray-500">
+                              Receive delivery updates
+                            </p>
                           </div>
                         </div>
 
@@ -123,8 +140,13 @@ export default function SettingsPage() {
                           <KeyRound size={18} className="text-green-600" />
 
                           <div>
-                            <p className="font-medium text-sm">Two-Factor Auth</p>
-                            <p className="text-xs text-gray-500">Extra account protection</p>
+                            <p className="font-medium text-sm">
+                              Two-Factor Auth
+                            </p>
+
+                            <p className="text-xs text-gray-500">
+                              Extra account protection
+                            </p>
                           </div>
                         </div>
 
@@ -144,12 +166,14 @@ export default function SettingsPage() {
               {/* RIGHT SIDE */}
               <div className="lg:col-span-2 space-y-6">
 
-                {/* PROFILE SETTINGS */}
                 <Card className="rounded-3xl border-0 shadow-xl bg-white">
                   <CardContent className="p-7 space-y-6">
 
                     <div>
-                      <h2 className="text-2xl font-bold">Profile Settings</h2>
+                      <h2 className="text-2xl font-bold">
+                        Profile Settings
+                      </h2>
+
                       <p className="text-sm text-gray-500 mt-1">
                         Update your personal information
                       </p>
@@ -158,7 +182,9 @@ export default function SettingsPage() {
                     <div className="grid md:grid-cols-2 gap-5">
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700">Full Name</label>
+                        <label className="text-sm font-semibold text-gray-700">
+                          Full Name
+                        </label>
 
                         <div className="relative">
                           <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -167,7 +193,9 @@ export default function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700">Email Address</label>
+                        <label className="text-sm font-semibold text-gray-700">
+                          Email Address
+                        </label>
 
                         <div className="relative">
                           <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -187,12 +215,14 @@ export default function SettingsPage() {
                   </CardContent>
                 </Card>
 
-                {/* SMS SETTINGS */}
                 <Card className="rounded-3xl border-0 shadow-xl bg-white">
                   <CardContent className="p-7 space-y-6">
 
                     <div>
-                      <h2 className="text-2xl font-bold">SMS Configuration</h2>
+                      <h2 className="text-2xl font-bold">
+                        SMS Configuration
+                      </h2>
+
                       <p className="text-sm text-gray-500 mt-1">
                         Customize your messaging preferences
                       </p>
@@ -201,7 +231,9 @@ export default function SettingsPage() {
                     <div className="grid md:grid-cols-2 gap-5">
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700">Sender ID</label>
+                        <label className="text-sm font-semibold text-gray-700">
+                          Sender ID
+                        </label>
 
                         <div className="relative">
                           <MessageSquare size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -210,14 +242,19 @@ export default function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700">Message Prefix</label>
+                        <label className="text-sm font-semibold text-gray-700">
+                          Message Prefix
+                        </label>
+
                         <Input className="h-12 rounded-xl border-gray-200 focus-visible:ring-green-500" />
                       </div>
 
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700">API Key</label>
+                      <label className="text-sm font-semibold text-gray-700">
+                        API Key
+                      </label>
 
                       <div className="relative">
                         <KeyRound size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -244,6 +281,7 @@ export default function SettingsPage() {
         </div>
 
       </div>
+
     </DashboardLayout>
   );
 }
