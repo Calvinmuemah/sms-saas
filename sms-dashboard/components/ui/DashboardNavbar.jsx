@@ -4,22 +4,28 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardNavbar() {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    // TEMP: only token now (you’ll replace with real user later)
-    const token = localStorage.getItem("token");
+    // ✅ get real stored auth object
+    const authData = localStorage.getItem("auth");
 
-    if (token) {
-      setUser({
-        name: "User",
-        email: "user@example.com",
-      });
+    if (authData) {
+      const parsed = JSON.parse(authData);
+      setUser(parsed.user);
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+    localStorage.removeItem("token");
+    router.push("/auth/login");
+  };
 
   return (
     <nav className="w-full fixed top-0 left-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm">
@@ -33,7 +39,17 @@ export default function DashboardNavbar() {
           </span>
         </Link>
 
-        {/* RIGHT SIDE */}
+        {/* LINKS (NEW) */}
+        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <Link href="/about" className="hover:text-green-600 transition">
+            About
+          </Link>
+          <Link href="/contact" className="hover:text-green-600 transition">
+            Contact
+          </Link>
+        </div>
+
+        {/* USER MENU */}
         <div className="relative">
 
           <Button
@@ -56,10 +72,11 @@ export default function DashboardNavbar() {
 
           </Button>
 
-          {/* DROPDOWN (future ready) */}
+          {/* DROPDOWN */}
           {open && (
             <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 shadow-xl rounded-2xl border overflow-hidden">
 
+              {/* USER INFO */}
               <div className="p-4 border-b">
                 <p className="font-semibold">
                   {user?.name || "Guest"}
@@ -69,11 +86,24 @@ export default function DashboardNavbar() {
                 </p>
               </div>
 
-              <button className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm">
-                Profile Settings
-              </button>
+              {/* ABOUT / CONTACT (mobile fallback inside dropdown) */}
+              <Link href="/about">
+                <div className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer">
+                  About
+                </div>
+              </Link>
 
-              <button className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-red-500">
+              <Link href="/contact">
+                <div className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm cursor-pointer">
+                  Contact
+                </div>
+              </Link>
+
+              {/* LOGOUT */}
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-red-500"
+              >
                 Logout
               </button>
 
