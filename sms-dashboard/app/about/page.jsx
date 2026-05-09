@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import DashboardLayout from "../../dashboard/layout";
+import DashboardLayout from "../../app/dashboard/layout";
 
 export default function About() {
   const [current, setCurrent] = useState(0);
