@@ -13,41 +13,50 @@ export default function Navbar() {
   }, [darkMode]);
 
   return (
-    <nav className="w-full fixed top-0 left-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo / Brand */}
+    <nav className="w-full fixed top-0 left-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm">
+
+      <div className="w-full px-2 md:px-4 py-3 flex justify-between items-center">
+
+        {/* LOGO */}
         <Link href="/">
-          <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+          <span className="text-xl md:text-2xl font-black text-green-600 dark:text-green-400">
             SMS Dashboard
           </span>
         </Link>
 
-        {/* Links */}
-        <div className="flex items-center gap-6">
-          <Link href="/" className="hover:text-green-600 dark:hover:text-green-400 transition">
+        {/* LINKS */}
+        <div className="flex items-center gap-3 md:gap-5 text-sm md:text-base">
+
+          <Link href="/" className="hover:text-green-600 transition">
             Home
           </Link>
-          <Link href="/about" className="hover:text-green-600 dark:hover:text-green-400 transition">
-            About Us
+
+          <Link href="/about" className="hover:text-green-600 transition">
+            About
           </Link>
-          <Link href="/contact" className="hover:text-green-600 dark:hover:text-green-400 transition">
-            Contact Us
+
+          <Link href="/contact" className="hover:text-green-600 transition">
+            Contact
           </Link>
+
           <Link href="/dashboard">
-            <Button className="px-4 py-2 bg-green-600 text-white font-semibold hover:bg-green-700 transition">
+            <Button className="h-9 px-4 bg-green-600 text-white hover:bg-green-700">
               Dashboard
             </Button>
           </Link>
 
-          {/* Dark Mode Toggle */}
+          {/* DARK MODE */}
           <Button
             onClick={() => setDarkMode(!darkMode)}
-            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded"
+            className="h-9 px-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             {darkMode ? "Light" : "Dark"}
           </Button>
+
         </div>
+
       </div>
+
     </nav>
   );
 }
