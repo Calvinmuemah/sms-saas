@@ -13,110 +13,133 @@ export default function About() {
 
   const [current, setCurrent] = useState(0);
 
-  const nextTestimonial = () =>
-    setCurrent((prev) => (prev + 1) % testimonials.length);
-
-  const prevTestimonial = () =>
-    setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative bg-gradient-to-r from-green-400 to-teal-600 pt-24 pb-16 text-center">
-        <h1 className="text-5xl font-extrabold text-white drop-shadow-lg">
+      {/* HERO */}
+      <section className="bg-gradient-to-r from-green-500 to-teal-600 pt-24 pb-14 text-center px-3 md:px-4">
+
+        <h1 className="text-5xl font-black text-white">
           About Us
         </h1>
 
-        <p className="mt-4 text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-          We are committed to providing a powerful SMS management platform that keeps your audience engaged and informed.
+        <p className="mt-3 text-white/90 max-w-2xl mx-auto text-sm md:text-base">
+          We build a powerful SMS platform that helps businesses connect with customers instantly, reliably, and at scale.
         </p>
+
       </section>
 
-      {/* Our Mission & Values */}
-      <section className="py-16 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8">
-        <Card className="shadow-xl rounded-xl hover:scale-105 transition-transform">
-          <CardContent>
-            <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
-            <p>Empower businesses to communicate seamlessly with their audience via SMS.</p>
+      {/* MISSION / VALUES */}
+      <section className="px-3 md:px-4 py-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
+
+        <Card className="rounded-3xl shadow-xl border-0">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-bold mb-2">Our Mission</h3>
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
+              Empower businesses to communicate seamlessly with their audience through fast and reliable SMS delivery.
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-xl rounded-xl hover:scale-105 transition-transform">
-          <CardContent>
-            <h3 className="text-2xl font-bold mb-4">Our Values</h3>
-            <p>Reliability, transparency, and user-centric design drive everything we build.</p>
+        <Card className="rounded-3xl shadow-xl border-0">
+          <CardContent className="p-6">
+            <h3 className="text-xl font-bold mb-2">Our Values</h3>
+            <p className="text-gray-600 dark:text-gray-300 text-sm">
+              Simplicity, reliability, and user-focused design guide every feature we build.
+            </p>
           </CardContent>
         </Card>
+
       </section>
 
-      {/* Team Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h3 className="text-3xl font-bold mb-8">Meet the Team</h3>
+      {/* TEAM */}
+      <section className="px-3 md:px-4 py-10 max-w-6xl mx-auto text-center">
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="shadow-lg rounded-xl hover:scale-105 transition-transform">
-              <CardContent className="text-center">
-                <img src="/team1.jpg" alt="Team Member" className="w-24 h-24 mx-auto rounded-full mb-4" />
-                <h4 className="font-bold text-lg">Alice Johnson</h4>
-                <p className="text-gray-600 dark:text-gray-300">CEO & Founder</p>
+        <h2 className="text-3xl font-black mb-6">Meet the Team</h2>
+
+        <div className="grid md:grid-cols-3 gap-4">
+
+          {[
+            { name: "Alice Johnson", role: "CEO & Founder", img: "/team1.jpg" },
+            { name: "Bob Smith", role: "CTO", img: "/team2.jpg" },
+            { name: "Clara Lee", role: "Head of Product", img: "/team3.jpg" },
+          ].map((t, i) => (
+            <Card key={i} className="rounded-3xl shadow-xl border-0 hover:scale-[1.02] transition">
+              <CardContent className="p-6 text-center">
+
+                <img
+                  src={t.img}
+                  alt={t.name}
+                  className="w-20 h-20 mx-auto rounded-2xl object-cover mb-4"
+                />
+
+                <h4 className="font-bold">{t.name}</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-300">
+                  {t.role}
+                </p>
+
               </CardContent>
             </Card>
+          ))}
 
-            <Card className="shadow-lg rounded-xl hover:scale-105 transition-transform">
-              <CardContent className="text-center">
-                <img src="/team2.jpg" alt="Team Member" className="w-24 h-24 mx-auto rounded-full mb-4" />
-                <h4 className="font-bold text-lg">Bob Smith</h4>
-                <p className="text-gray-600 dark:text-gray-300">CTO</p>
-              </CardContent>
-            </Card>
-
-            <Card className="shadow-lg rounded-xl hover:scale-105 transition-transform">
-              <CardContent className="text-center">
-                <img src="/team3.jpg" alt="Team Member" className="w-24 h-24 mx-auto rounded-full mb-4" />
-                <h4 className="font-bold text-lg">Clara Lee</h4>
-                <p className="text-gray-600 dark:text-gray-300">Head of Product</p>
-              </CardContent>
-            </Card>
-          </div>
         </div>
+
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 max-w-4xl mx-auto px-6 text-center">
-        <h3 className="text-3xl font-bold mb-8">What Our Clients Say</h3>
+      {/* TESTIMONIALS */}
+      <section className="px-3 md:px-4 py-10 max-w-4xl mx-auto text-center">
 
-        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-8 mx-auto transition-opacity duration-300">
-          <p className="text-gray-700 dark:text-gray-300 italic mb-4">
-            "{testimonials[current].feedback}"
-          </p>
-          <h4 className="font-bold text-green-600 dark:text-green-400">
-            {testimonials[current].name}
-          </h4>
-        </div>
+        <h2 className="text-3xl font-black mb-6">
+          What Clients Say
+        </h2>
 
-        <div className="mt-6 flex justify-center gap-4">
+        <Card className="rounded-3xl shadow-2xl border-0">
+          <CardContent className="p-8">
+
+            <p className="italic text-gray-600 dark:text-gray-300">
+              “{testimonials[current].feedback}”
+            </p>
+
+            <h4 className="mt-4 font-bold text-green-600">
+              {testimonials[current].name}
+            </h4>
+
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-center gap-3 mt-5">
+
           <button
-            onClick={prevTestimonial}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            onClick={() =>
+              setCurrent((p) =>
+                p === 0 ? testimonials.length - 1 : p - 1
+              )
+            }
+            className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
           >
             Prev
           </button>
 
           <button
-            onClick={nextTestimonial}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            onClick={() =>
+              setCurrent((p) => (p + 1) % testimonials.length)
+            }
+            className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
           >
             Next
           </button>
+
         </div>
+
       </section>
 
-      <footer className="bg-gray-900 text-white py-6 text-center mt-auto">
-        <p>&copy; {new Date().getFullYear()} SMS Dashboard. All rights reserved.</p>
+      {/* FOOTER */}
+      <footer className="mt-auto py-6 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} SMS Dashboard
       </footer>
+
     </div>
   );
 }
