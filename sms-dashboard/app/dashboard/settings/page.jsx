@@ -21,9 +21,11 @@ export default function SettingsPage() {
 
       <Navbar />
 
-      <div className="pt-24 pb-10 px-4 md:px-6">
+      {/* SMALLER SIDE MARGINS */}
+      <div className="pt-24 pb-10 px-3 md:px-4">
 
-        <div className="max-w-6xl mx-auto space-y-8">
+        {/* FULL WIDTH CONTAINER */}
+        <div className="max-w-full space-y-8">
 
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

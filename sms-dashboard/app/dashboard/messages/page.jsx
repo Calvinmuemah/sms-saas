@@ -91,9 +91,11 @@ export default function MessagesPage() {
 
       <Navbar />
 
-      <div className="pt-24 pb-10 px-4 md:px-6">
+      {/* SMALLER SIDE MARGINS */}
+      <div className="pt-24 pb-10 px-3 md:px-4">
 
-        <div className="max-w-7xl mx-auto space-y-8">
+        {/* WIDER CONTAINER */}
+        <div className="max-w-full space-y-8">
 
           {/* HEADER */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
@@ -226,7 +228,7 @@ export default function MessagesPage() {
               </CardContent>
             </Card>
 
-            {/* COST */}
+            {/* GATEWAY */}
             <Card className="rounded-3xl border-0 shadow-xl bg-white">
               <CardContent className="p-5">
 
@@ -332,17 +334,14 @@ export default function MessagesPage() {
                           className="border-b hover:bg-green-50/40 transition"
                         >
 
-                          {/* PHONE */}
                           <td className="px-6 py-5 font-medium">
                             {m.phone}
                           </td>
 
-                          {/* MESSAGE */}
                           <td className="px-6 py-5 max-w-[320px] truncate text-gray-600">
                             {m.message}
                           </td>
 
-                          {/* STATUS */}
                           <td className="px-6 py-5">
 
                             <span
@@ -357,19 +356,16 @@ export default function MessagesPage() {
 
                           </td>
 
-                          {/* COST */}
                           <td className="px-6 py-5 font-medium">
                             {m.cost}
                           </td>
 
-                          {/* ID */}
                           <td className="px-6 py-5 text-gray-500 text-sm">
                             {m.message_id !== "None"
                               ? m.message_id
                               : "N/A"}
                           </td>
 
-                          {/* DATE */}
                           <td className="px-6 py-5">
 
                             <div className="flex items-center gap-2 text-sm text-gray-500">
