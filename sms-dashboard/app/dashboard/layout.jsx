@@ -10,13 +10,13 @@ export default function DashboardLayout({ children }) {
       <Sidebar />
 
       {/* MAIN AREA */}
-      <div className="flex flex-col w-full ml-64">
+      <div className="flex flex-col flex-1 ml-64 min-h-screen">
 
-        {/* ALWAYS DASHBOARD NAVBAR */}
+        {/* TOP NAVBAR */}
         <DashboardNavbar />
 
-        {/* PAGE CONTENT */}
-        <main className="flex-1 pt-16 p-2 md:p-3">
+        {/* PAGE CONTENT AREA */}
+        <main className="flex-1 pt-20 px-2 sm:px-4 md:px-6 lg:px-8">
           {children}
         </main>
 
