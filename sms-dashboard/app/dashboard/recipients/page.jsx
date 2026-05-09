@@ -26,7 +26,12 @@ export default function RecipientsPage() {
   const [numbers, setNumbers] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [editingRecipient, setEditingRecipient] = useState(null);
+
+  const [editingRecipient, setEditingRecipient] =
+    useState(null);
+
+  const [showCreateModal, setShowCreateModal] =
+    useState(false);
 
   const [search, setSearch] = useState("");
 
@@ -81,6 +86,8 @@ export default function RecipientsPage() {
       setName("");
       setNumbers("");
 
+      setShowCreateModal(false);
+
       fetchRecipients();
     } catch {
       toast.error("Failed to create recipient group");
@@ -89,7 +96,7 @@ export default function RecipientsPage() {
     }
   };
 
-  // DELETE GROUP
+  // DELETE
   const handleDelete = async (id) => {
     try {
       await fetch(
@@ -146,7 +153,7 @@ export default function RecipientsPage() {
     }
   };
 
-  // FILTERED
+  // FILTER
   const filteredRecipients = useMemo(() => {
     return recipients.filter(
       (r) =>
@@ -157,7 +164,7 @@ export default function RecipientsPage() {
     );
   }, [search, recipients]);
 
-  // TOTAL NUMBERS
+  // TOTAL CONTACTS
   const totalNumbers = useMemo(() => {
     return recipients.reduce(
       (acc, curr) => acc + curr.numbers.length,
@@ -168,9 +175,9 @@ export default function RecipientsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50/40 to-white text-gray-900">
 
-      <div className="pt-10 pb-10 px-3 md:px-4">
+      <div className="pt-24 pb-10 px-2 md:px-3">
 
-        <div className="max-w-5xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-7">
 
           {/* HEADER */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
@@ -185,7 +192,7 @@ export default function RecipientsPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
 
               {/* SEARCH */}
               <div className="relative">
@@ -196,18 +203,29 @@ export default function RecipientsPage() {
                 />
 
                 <Input
-                  placeholder="Search groups..."
+                  placeholder="Search recipients..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="h-11 w-[260px] pl-11 rounded-2xl border-gray-200 focus-visible:ring-green-500"
+                  className="h-11 w-full sm:w-[280px] pl-11 rounded-2xl border-gray-200 focus-visible:ring-green-500"
                 />
 
               </div>
 
+              {/* CREATE */}
+              <button
+                onClick={() =>
+                  setShowCreateModal(true)
+                }
+                className="h-11 px-5 rounded-2xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2 shadow-lg transition cursor-pointer"
+              >
+                <Plus size={18} />
+                Create Recipient
+              </button>
+
               {/* REFRESH */}
               <button
                 onClick={fetchRecipients}
-                className="h-11 px-5 rounded-2xl bg-green-600 hover:bg-green-700 text-white flex items-center gap-2 shadow-lg transition cursor-pointer"
+                className="h-11 px-5 rounded-2xl bg-white border border-gray-200 hover:border-green-300 hover:bg-green-50 text-gray-700 flex items-center justify-center gap-2 transition cursor-pointer"
               >
                 <RefreshCw size={17} />
                 Refresh
@@ -278,99 +296,12 @@ export default function RecipientsPage() {
 
           </div>
 
-          {/* CREATE GROUP */}
-          <Card className="rounded-3xl border-0 shadow-2xl bg-white overflow-hidden">
-
-            <div className="h-2 bg-gradient-to-r from-green-500 to-emerald-600" />
-
-            <CardContent className="p-7 space-y-6">
-
-              <div className="flex items-center gap-3">
-
-                <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center">
-                  <UserPlus2
-                    size={24}
-                    className="text-green-600"
-                  />
-                </div>
-
-                <div>
-                  <h2 className="text-2xl font-bold">
-                    Create Recipient Group
-                  </h2>
-
-                  <p className="text-sm text-gray-500">
-                    Add multiple recipients for bulk SMS
-                  </p>
-                </div>
-
-              </div>
-
-              {/* INPUTS */}
-              <div className="grid md:grid-cols-2 gap-5">
-
-                {/* GROUP NAME */}
-                <div className="space-y-2">
-
-                  <label className="text-sm font-semibold text-gray-700">
-                    Group Name
-                  </label>
-
-                  <Input
-                    placeholder="Marketing Team"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="h-12 rounded-2xl border-gray-200 focus-visible:ring-green-500"
-                  />
-
-                </div>
-
-                {/* NUMBERS */}
-                <div className="space-y-2">
-
-                  <label className="text-sm font-semibold text-gray-700">
-                    Phone Numbers
-                  </label>
-
-                  <textarea
-                    placeholder="Enter numbers separated by comma or new line"
-                    value={numbers}
-                    onChange={(e) => setNumbers(e.target.value)}
-                    rows={5}
-                    className="w-full rounded-2xl border border-gray-200 p-4 outline-none focus:border-green-500 resize-none"
-                  />
-
-                </div>
-
-              </div>
-
-              {/* BUTTON */}
-              <div className="flex justify-end">
-
-                <Button
-                  onClick={handleCreate}
-                  disabled={loading}
-                  className="bg-green-600 hover:bg-green-700 h-11 px-6 rounded-2xl shadow-lg cursor-pointer"
-                >
-                  <Plus size={18} className="mr-2" />
-
-                  {loading
-                    ? "Creating..."
-                    : "Create Group"}
-                </Button>
-
-              </div>
-
-            </CardContent>
-
-          </Card>
-
-          {/* GROUPS TABLE */}
+          {/* TABLE */}
           <Card className="rounded-3xl border-0 shadow-2xl bg-white overflow-hidden">
 
             <CardContent className="p-0">
 
-              <div className="px-7 py-6 border-b bg-green-50">
+              <div className="px-6 py-5 border-b bg-green-50">
 
                 <h2 className="text-2xl font-bold">
                   Recipient Groups
@@ -433,7 +364,7 @@ export default function RecipientsPage() {
                           </td>
 
                           {/* NUMBERS */}
-                          <td className="px-6 py-5 max-w-[400px]">
+                          <td className="px-6 py-5 max-w-[420px]">
 
                             <div className="flex flex-wrap gap-2">
 
@@ -458,7 +389,7 @@ export default function RecipientsPage() {
 
                           </td>
 
-                          {/* COUNT */}
+                          {/* CONTACTS */}
                           <td className="px-6 py-5">
 
                             <span className="px-4 py-1.5 rounded-full bg-green-100 text-green-700 text-xs font-bold">
@@ -510,118 +441,236 @@ export default function RecipientsPage() {
 
           </Card>
 
-          {/* EDIT MODAL */}
-          {editingRecipient && (
-            <Card className="rounded-3xl border-0 shadow-2xl bg-white">
-
-              <CardContent className="p-7 space-y-6">
-
-                <div className="flex items-center justify-between">
-
-                  <div>
-                    <h2 className="text-2xl font-bold">
-                      Edit Recipient Group
-                    </h2>
-
-                    <p className="text-sm text-gray-500 mt-1">
-                      Update recipient information
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() =>
-                      setEditingRecipient(null)
-                    }
-                    className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition cursor-pointer"
-                  >
-                    <X size={18} />
-                  </button>
-
-                </div>
-
-                <form
-                  onSubmit={handleUpdateSubmit}
-                  className="space-y-5"
-                >
-
-                  <div className="space-y-2">
-
-                    <label className="text-sm font-semibold text-gray-700">
-                      Group Name
-                    </label>
-
-                    <Input
-                      value={editingRecipient.name}
-                      onChange={(e) =>
-                        setEditingRecipient({
-                          ...editingRecipient,
-                          name: e.target.value,
-                        })
-                      }
-                      className="h-12 rounded-2xl border-gray-200 focus-visible:ring-green-500"
-                    />
-
-                  </div>
-
-                  <div className="space-y-2">
-
-                    <label className="text-sm font-semibold text-gray-700">
-                      Numbers
-                    </label>
-
-                    <textarea
-                      value={editingRecipient.numbers.join(
-                        ", "
-                      )}
-                      onChange={(e) =>
-                        setEditingRecipient({
-                          ...editingRecipient,
-                          numbers: e.target.value
-                            .split(",")
-                            .map((n) => n.trim()),
-                        })
-                      }
-                      rows={5}
-                      className="w-full rounded-2xl border border-gray-200 p-4 outline-none focus:border-green-500 resize-none"
-                    />
-
-                  </div>
-
-                  <div className="flex gap-3 justify-end">
-
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        setEditingRecipient(null)
-                      }
-                      className="bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-2xl h-11 px-6 cursor-pointer"
-                    >
-                      Cancel
-                    </Button>
-
-                    <Button
-                      type="submit"
-                      className="bg-green-600 hover:bg-green-700 rounded-2xl h-11 px-6 shadow-lg cursor-pointer"
-                    >
-                      <Save
-                        size={17}
-                        className="mr-2"
-                      />
-                      Save Changes
-                    </Button>
-
-                  </div>
-
-                </form>
-
-              </CardContent>
-
-            </Card>
-          )}
-
         </div>
 
       </div>
+
+      {/* CREATE MODAL */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4">
+
+          <div className="w-full max-w-2xl rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+
+            {/* TOP */}
+            <div className="flex items-center justify-between px-7 py-5 border-b bg-green-50">
+
+              <div className="flex items-center gap-3">
+
+                <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center">
+                  <UserPlus2
+                    size={24}
+                    className="text-green-600"
+                  />
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-bold">
+                    Create Recipient Group
+                  </h2>
+
+                  <p className="text-sm text-gray-500">
+                    Add contacts for bulk messaging
+                  </p>
+                </div>
+
+              </div>
+
+              <button
+                onClick={() =>
+                  setShowCreateModal(false)
+                }
+                className="w-10 h-10 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center transition cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+
+            </div>
+
+            {/* CONTENT */}
+            <div className="p-7 space-y-5">
+
+              {/* NAME */}
+              <div className="space-y-2">
+
+                <label className="text-sm font-semibold text-gray-700">
+                  Group Name
+                </label>
+
+                <Input
+                  placeholder="Marketing Team"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-12 rounded-2xl border-gray-200 focus-visible:ring-green-500"
+                />
+
+              </div>
+
+              {/* NUMBERS */}
+              <div className="space-y-2">
+
+                <label className="text-sm font-semibold text-gray-700">
+                  Phone Numbers
+                </label>
+
+                <textarea
+                  placeholder="Enter numbers separated by comma or new line"
+                  value={numbers}
+                  onChange={(e) =>
+                    setNumbers(e.target.value)
+                  }
+                  rows={6}
+                  className="w-full rounded-2xl border border-gray-200 p-4 outline-none focus:border-green-500 resize-none"
+                />
+
+              </div>
+
+              {/* BUTTONS */}
+              <div className="flex justify-end gap-3 pt-2">
+
+                <Button
+                  type="button"
+                  onClick={() =>
+                    setShowCreateModal(false)
+                  }
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-2xl h-11 px-6 cursor-pointer"
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  onClick={handleCreate}
+                  disabled={loading}
+                  className="bg-green-600 hover:bg-green-700 rounded-2xl h-11 px-6 shadow-lg cursor-pointer"
+                >
+                  <Plus
+                    size={18}
+                    className="mr-2"
+                  />
+
+                  {loading
+                    ? "Creating..."
+                    : "Create Group"}
+                </Button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* EDIT MODAL */}
+      {editingRecipient && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4">
+
+          <div className="w-full max-w-2xl rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+
+            {/* TOP */}
+            <div className="flex items-center justify-between px-7 py-5 border-b bg-green-50">
+
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Edit Recipient Group
+                </h2>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  Update recipient information
+                </p>
+              </div>
+
+              <button
+                onClick={() =>
+                  setEditingRecipient(null)
+                }
+                className="w-10 h-10 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center transition cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+
+            </div>
+
+            {/* BODY */}
+            <form
+              onSubmit={handleUpdateSubmit}
+              className="p-7 space-y-5"
+            >
+
+              <div className="space-y-2">
+
+                <label className="text-sm font-semibold text-gray-700">
+                  Group Name
+                </label>
+
+                <Input
+                  value={editingRecipient.name}
+                  onChange={(e) =>
+                    setEditingRecipient({
+                      ...editingRecipient,
+                      name: e.target.value,
+                    })
+                  }
+                  className="h-12 rounded-2xl border-gray-200 focus-visible:ring-green-500"
+                />
+
+              </div>
+
+              <div className="space-y-2">
+
+                <label className="text-sm font-semibold text-gray-700">
+                  Numbers
+                </label>
+
+                <textarea
+                  value={editingRecipient.numbers.join(
+                    ", "
+                  )}
+                  onChange={(e) =>
+                    setEditingRecipient({
+                      ...editingRecipient,
+                      numbers: e.target.value
+                        .split(",")
+                        .map((n) => n.trim()),
+                    })
+                  }
+                  rows={6}
+                  className="w-full rounded-2xl border border-gray-200 p-4 outline-none focus:border-green-500 resize-none"
+                />
+
+              </div>
+
+              <div className="flex justify-end gap-3">
+
+                <Button
+                  type="button"
+                  onClick={() =>
+                    setEditingRecipient(null)
+                  }
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-2xl h-11 px-6 cursor-pointer"
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-700 rounded-2xl h-11 px-6 shadow-lg cursor-pointer"
+                >
+                  <Save
+                    size={17}
+                    className="mr-2"
+                  />
+                  Save Changes
+                </Button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+      )}
 
     </div>
   );
