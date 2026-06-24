@@ -100,3 +100,47 @@ export const checkAndDeductBilling = async (userId, recipientCount) => {
   }
 };
 
+export const verifyAndRechargePaystack = async (userId, reference) => {
+  const paystackSecret = process.env.PAYSTACK_SECRET_KEY;
+  if (!paystackSecret) {
+    throw new Error("Paystack secret key is missing on the server. Please check environment configuration.");
+  }
+
+  try {
+    const res = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+      headers: {
+        Authorization: `Bearer ${paystackSecret}`,
+      },
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.status || data.data.status !== "success") {
+      throw new Error(data.message || "Paystack transaction verification failed.");
+    }
+
+    // Paystack amounts are processed in cents/kobos (subunit). We divide by 100.
+    const amountPaid = parseFloat(data.data.amount) / 100.0;
+
+    // Credit balance and automatically upgrade user to 'payg' plan if they are on 'free'
+    const { rows } = await pool.query(
+      `UPDATE system_users 
+       SET balance = balance + $1, 
+           plan = CASE WHEN plan = 'free' THEN 'payg' ELSE plan END 
+       WHERE id = $2 
+       RETURNING plan, balance, sms_sent_free`,
+      [amountPaid, userId]
+    );
+
+    return {
+      plan: rows[0].plan,
+      balance: parseFloat(rows[0].balance || 0),
+      smsSentFree: parseInt(rows[0].sms_sent_free || 0),
+      freeLimit: 20
+    };
+  } catch (err) {
+    console.error("Paystack verification error:", err);
+    throw new Error(err.message || "Payment verification failed.");
+  }
+};
+
+

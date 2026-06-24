@@ -40,7 +40,11 @@ export default function CampaignsPage() {
 
   const fetchCampaigns = async () => {
     try {
-      const res = await fetch(`${API}/campaigns`);
+      const res = await fetch(`${API}/campaigns`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setCampaigns(data.data || []);
     } catch {
@@ -50,7 +54,11 @@ export default function CampaignsPage() {
 
   const fetchRecipients = async () => {
     try {
-      const res = await fetch(`${API}/recipients`);
+      const res = await fetch(`${API}/recipients`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setRecipients(data.data || []);
     } catch {
@@ -84,7 +92,10 @@ export default function CampaignsPage() {
 
       await fetch(`${API}/campaigns`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({ name, message, recipient }),
       });
 
@@ -103,6 +114,9 @@ export default function CampaignsPage() {
     try {
       await fetch(`${API}/campaigns/${id}/send`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       toast.success("Campaign sent 🚀");

@@ -18,7 +18,11 @@ export default function ScheduledPage() {
 
   const fetchSchedules = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/scheduled`);
+      const res = await fetch(`${API_BASE_URL}/scheduled`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setSchedules(Array.isArray(data) ? data : []); // Ensure data is an array
     } catch {
@@ -28,7 +32,11 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/recipients`);
+      const res = await fetch(`${API_BASE_URL}/recipients`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setExistingRecipients(data.success && Array.isArray(data.data) ? data.data : []);
     } catch (error) {
@@ -81,7 +89,10 @@ export default function ScheduledPage() {
 
       await fetch(`${API_BASE_URL}/scheduled`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({ message, scheduledAt: formattedDate, recipients }),
       });
 
@@ -101,6 +112,9 @@ export default function ScheduledPage() {
     try {
       await fetch(`${API_BASE_URL}/scheduled/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       toast.success("Schedule cancelled");

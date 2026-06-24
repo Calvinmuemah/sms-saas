@@ -3,12 +3,13 @@ import { createRecipientGroup, getRecipientGroups, updateRecipientGroup, deleteR
 // Controller to create a recipient group
 export const createRecipient = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { name, numbers } = req.body;
     
     // Ensure numbers is stored as a string
     const numbersString = Array.isArray(numbers) ? numbers.join(',') : numbers;
 
-    const group = await createRecipientGroup(name, numbersString);
+    const group = await createRecipientGroup(name, numbersString, userId);
     res.status(201).json({ success: true, data: group });
   } catch (error) {
     console.error("Error creating recipient group:", error);
@@ -19,7 +20,8 @@ export const createRecipient = async (req, res) => {
 // Controller to fetch all recipient groups
 export const fetchRecipients = async (req, res) => {
   try {
-    const groups = await getRecipientGroups();
+    const userId = req.user.id;
+    const groups = await getRecipientGroups(userId);
     const formattedGroups = groups.map(group => ({
       ...group,
       numbers: typeof group.numbers === 'string' ? group.numbers.split(',') : group.numbers, // Ensure numbers is an array
@@ -34,13 +36,17 @@ export const fetchRecipients = async (req, res) => {
 // Controller to update a recipient group
 export const updateRecipient = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { id } = req.params;
     const { name, numbers } = req.body;
 
     // Ensure numbers is stored as a string
     const numbersString = Array.isArray(numbers) ? numbers.join(',') : numbers;
 
-    const updatedGroup = await updateRecipientGroup(id, name, numbersString);
+    const updatedGroup = await updateRecipientGroup(id, name, numbersString, userId);
+    if (!updatedGroup) {
+      return res.status(404).json({ success: false, message: "Recipient group not found or unauthorized" });
+    }
     res.status(200).json({ success: true, data: updatedGroup });
   } catch (error) {
     console.error("Error updating recipient group:", error);
@@ -51,8 +57,9 @@ export const updateRecipient = async (req, res) => {
 // Controller to delete a recipient group
 export const deleteRecipient = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { id } = req.params;
-    const result = await deleteRecipientGroup(id);
+    const result = await deleteRecipientGroup(id, userId);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     console.error("Error deleting recipient group:", error);

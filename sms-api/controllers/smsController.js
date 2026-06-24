@@ -95,6 +95,11 @@ export const sendSMS = async (req, res) => {
 
   const userId = req.user.id;
 
+  // Automatically append opt-out compliance notice if missing
+  const compliantMessage = message.toLowerCase().includes("stop")
+    ? message
+    : `${message} (Reply STOP to opt out)`;
+
   // Enforce billing check before triggering AfricasTalking / simulated sending
   try {
     await checkAndDeductBilling(userId, recipients.length);
@@ -103,7 +108,7 @@ export const sendSMS = async (req, res) => {
   }
 
   try {
-    const results = await sendBulkSMS(recipients, message);
+    const results = await sendBulkSMS(recipients, compliantMessage);
 
     // ✅ Count success
     const successful = results.filter(
@@ -118,7 +123,7 @@ export const sendSMS = async (req, res) => {
     for (let r of results) {
       await createMessage({
         phone: r.number,
-        message,
+        message: compliantMessage,
         status: r.status,
         cost: r.cost || null,
         messageId: r.messageId,

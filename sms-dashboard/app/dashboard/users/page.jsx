@@ -18,7 +18,11 @@ export default function UsersPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/users/all`)
+    fetch(`${API_BASE_URL}/users/all`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch users");

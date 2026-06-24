@@ -2,6 +2,7 @@ import pool from "../config/db.js";
 import { sendBulkSMS } from "./smsService.js";
 import { createMessage } from "../models/Message.js";
 import { checkAndDeductBilling } from "./billing.service.js";
+import { logError } from "../utils/logger.js";
 
 export const startScheduler = () => {
   console.log("Scheduler service initialized. Polling database every 60 seconds...");
@@ -42,14 +43,19 @@ export const startScheduler = () => {
               await checkAndDeductBilling(row.user_id, activeRecipients.length);
             }
 
+            // Automatically append opt-out compliance notice if missing
+            const compliantMessage = row.message.toLowerCase().includes("stop")
+              ? row.message
+              : `${row.message} (Reply STOP to opt out)`;
+
             console.log(`Sending scheduled message ID ${row.id} to ${activeRecipients.length} recipients.`);
-            const results = await sendBulkSMS(activeRecipients, row.message);
+            const results = await sendBulkSMS(activeRecipients, compliantMessage);
 
             // Log each message sent in the messages table
             for (let r of results) {
               await createMessage({
                 phone: r.number,
-                message: row.message,
+                message: compliantMessage,
                 status: r.status,
                 cost: r.cost || null,
                 messageId: r.messageId,
@@ -64,11 +70,11 @@ export const startScheduler = () => {
           await pool.query("DELETE FROM scheduled WHERE id=$1", [row.id]);
           console.log(`Scheduled message ID ${row.id} processed and deleted.`);
         } catch (err) {
-          console.error(`Failed to process scheduled message ID ${row.id}:`, err.message);
+          logError(`Scheduler processing ID ${row.id}`, err);
         }
       }
     } catch (error) {
-      console.error("Scheduler error polling DB:", error.message);
+      logError("Scheduler database poll", error);
     }
   }, 60000); // Poll every 60 seconds
 };

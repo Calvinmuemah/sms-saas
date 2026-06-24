@@ -1,0 +1,222 @@
+[2026-06-24T14:01:07.009Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:01:07.010Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:01:07.012Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:02:07.033Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:02:07.028Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:02:07.030Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:03:07.002Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:03:07.004Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:03:07.002Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:04:07.528Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:04:07.530Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:04:07.531Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:05:07.389Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:05:07.390Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:05:07.391Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:06:07.754Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:06:07.755Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:06:07.756Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:07:05.671Z] CONTEXT: Scheduler database poll | ERROR: AggregateError
+STACK: AggregateError [ETIMEDOUT]: 
+    at /home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:13:24)
+----------------------------------------
+[2026-06-24T14:08:07.233Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:08:07.235Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:08:07.237Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:09:07.208Z] CONTEXT: Scheduler processing ID 4 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:09:07.209Z] CONTEXT: Scheduler processing ID 5 | ERROR: "to[0]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[0]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------
+[2026-06-24T14:09:07.210Z] CONTEXT: Scheduler processing ID 6 | ERROR: "to[1]" failed custom validation because Invalid country calling code; 
+STACK: Error: "to[1]" failed custom validation because Invalid country calling code; 
+    at _validateParams (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:69:29)
+    at SMS._send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:73:7)
+    at SMS.send (/home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/node_modules/africastalking/lib/sms.js:167:19)
+    at sendBulkSMS (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/smsService.js:4:30)
+    at Timeout._onTimeout (file:///home/calvin/Desktop/new-magics/learn/sms_opt/sms-api/services/schedulerService.js:52:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+----------------------------------------

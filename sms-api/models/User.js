@@ -60,33 +60,34 @@ export const getAllUsers = async () => {
 };
 
 // Create recipient group
-export const createRecipientGroup = async (name, numbers) => {
+export const createRecipientGroup = async (name, numbers, userId) => {
   const result = await pool.query(
-    `INSERT INTO recipient_groups (name, numbers) VALUES ($1, $2) RETURNING *`,
-    [name, numbers]
+    `INSERT INTO recipient_groups (name, numbers, user_id) VALUES ($1, $2, $3) RETURNING *`,
+    [name, numbers, userId]
   );
   return result.rows[0];
 };
 
 // Get all recipient groups
-export const getRecipientGroups = async () => {
+export const getRecipientGroups = async (userId) => {
   const result = await pool.query(
-    `SELECT * FROM recipient_groups ORDER BY created_at DESC`
+    `SELECT * FROM recipient_groups WHERE user_id = $1 ORDER BY created_at DESC`,
+    [userId]
   );
   return result.rows;
 };
 
 // Update recipient group
-export const updateRecipientGroup = async (id, name, numbers) => {
+export const updateRecipientGroup = async (id, name, numbers, userId) => {
   const result = await pool.query(
-    `UPDATE recipient_groups SET name=$1, numbers=$2 WHERE id=$3 RETURNING *`,
-    [name, numbers, id]
+    `UPDATE recipient_groups SET name=$1, numbers=$2 WHERE id=$3 AND user_id=$4 RETURNING *`,
+    [name, numbers, id, userId]
   );
   return result.rows[0];
 };
 
 // Delete recipient group
-export const deleteRecipientGroup = async (id) => {
-  await pool.query(`DELETE FROM recipient_groups WHERE id=$1`, [id]);
+export const deleteRecipientGroup = async (id, userId) => {
+  await pool.query(`DELETE FROM recipient_groups WHERE id=$1 AND user_id=$2`, [id, userId]);
   return { message: "Recipient group deleted" };
 };

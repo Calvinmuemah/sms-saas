@@ -34,3 +34,19 @@ export const recharge = async (req, res) => {
     res.status(400).json({ success: false, error: err.message || "Failed to recharge" });
   }
 };
+
+export const rechargePaystack = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { reference } = req.body;
+    if (!reference) {
+      return res.status(400).json({ success: false, error: "Transaction reference is required" });
+    }
+    const details = await service.verifyAndRechargePaystack(userId, reference);
+    res.json({ success: true, data: details });
+  } catch (err) {
+    console.error("Failed to verify Paystack payment:", err);
+    res.status(400).json({ success: false, error: err.message || "Failed to verify Paystack payment" });
+  }
+};
+

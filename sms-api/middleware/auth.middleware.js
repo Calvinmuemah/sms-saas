@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import pool from "../config/db.js";
+import crypto from "crypto";
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_jwt_secret";
 
@@ -33,7 +34,8 @@ export const requireApiKeyOrUserAuth = async (req, res, next) => {
   // Check if it looks like an API key
   if (token.startsWith("sk_")) {
     try {
-      const { rows } = await pool.query("SELECT * FROM api_keys WHERE key = $1", [token]);
+      const hashedInput = crypto.createHash("sha256").update(token).digest("hex");
+      const { rows } = await pool.query("SELECT * FROM api_keys WHERE key = $1", [hashedInput]);
       if (rows.length === 0) {
         return res.status(401).json({ error: "Unauthorized: Invalid API key" });
       }

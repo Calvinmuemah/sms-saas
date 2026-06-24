@@ -35,8 +35,8 @@ export const sendCampaign = async (id, userId) => {
   // If a recipient group is specified, load numbers from it
   if (campaignData.recipient) {
     const groupQuery = await pool.query(
-      "SELECT numbers FROM recipient_groups WHERE id=$1",
-      [campaignData.recipient]
+      "SELECT numbers FROM recipient_groups WHERE id=$1 AND user_id=$2",
+      [campaignData.recipient, userId]
     );
     if (groupQuery.rows.length > 0) {
       const numbersStr = groupQuery.rows[0].numbers || "";
@@ -71,14 +71,19 @@ export const sendCampaign = async (id, userId) => {
   // 1. Enforce billing checks and credit deductions
   await checkAndDeductBilling(userId, numbers.length);
 
+  // Automatically append opt-out compliance notice if missing
+  const compliantMessage = campaignData.message.toLowerCase().includes("stop")
+    ? campaignData.message
+    : `${campaignData.message} (Reply STOP to opt out)`;
+
   // 2. Dispatch bulk SMS messages
-  const results = await sendBulkSMS(numbers, campaignData.message);
+  const results = await sendBulkSMS(numbers, compliantMessage);
 
   // 3. Log sent messages in DB for dashboard metrics
   for (let r of results) {
     await createMessage({
       phone: r.number,
-      message: campaignData.message,
+      message: compliantMessage,
       status: r.status,
       cost: r.cost || null,
       messageId: r.messageId,
