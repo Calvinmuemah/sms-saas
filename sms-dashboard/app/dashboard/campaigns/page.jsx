@@ -21,8 +21,9 @@ import {
 } from "@/components/ui/select";
 
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 
-const API = "https://sms-saas-53mg.vercel.app/api/v1";
+const API = API_BASE_URL;
 
 export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState([]);
@@ -209,7 +210,7 @@ export default function CampaignsPage() {
 
               <tbody>
                 {filtered.map((c, i) => (
-                  <tr key={c._id} className="border-b hover:bg-green-50">
+                  <tr key={c.id} className="border-b hover:bg-green-50">
 
                     <td className="p-3 font-bold text-gray-500">
                       {i + 1}
@@ -232,7 +233,7 @@ export default function CampaignsPage() {
                     <td className="p-3">
                       <Button
                         size="sm"
-                        onClick={() => handleSend(c._id)}
+                        onClick={() => handleSend(c.id)}
                         className="bg-green-600 hover:bg-green-700"
                       >
                         Send

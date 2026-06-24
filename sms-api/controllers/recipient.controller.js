@@ -4,7 +4,11 @@ import { createRecipientGroup, getRecipientGroups, updateRecipientGroup, deleteR
 export const createRecipient = async (req, res) => {
   try {
     const { name, numbers } = req.body;
-    const group = await createRecipientGroup(name, numbers);
+    
+    // Ensure numbers is stored as a string
+    const numbersString = Array.isArray(numbers) ? numbers.join(',') : numbers;
+
+    const group = await createRecipientGroup(name, numbersString);
     res.status(201).json({ success: true, data: group });
   } catch (error) {
     console.error("Error creating recipient group:", error);

@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function ScheduledPage() {
   const [schedules, setSchedules] = useState([]);
@@ -17,7 +18,7 @@ export default function ScheduledPage() {
 
   const fetchSchedules = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled");
+      const res = await fetch(`${API_BASE_URL}/scheduled`);
       const data = await res.json();
       setSchedules(Array.isArray(data) ? data : []); // Ensure data is an array
     } catch {
@@ -27,7 +28,7 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/recipients");
+      const res = await fetch(`${API_BASE_URL}/recipients`);
       const data = await res.json();
       console.log("Recipients API Response:", data); // Debugging log
       setExistingRecipients(Array.isArray(data) ? data : []); // Ensure data is an array
@@ -66,7 +67,7 @@ export default function ScheduledPage() {
 
       const formattedDate = new Date(date).toISOString(); // Ensure ISO format
 
-      await fetch("https://sms-saas-53mg.vercel.app/api/v1/scheduled", {
+      await fetch(`${API_BASE_URL}/scheduled`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, scheduledAt: formattedDate, recipients }),
@@ -86,7 +87,7 @@ export default function ScheduledPage() {
 
   const handleCancel = async (id) => {
     try {
-      await fetch(`https://sms-saas-53mg.vercel.app/api/v1/scheduled/${id}`, {
+      await fetch(`${API_BASE_URL}/scheduled/${id}`, {
         method: "DELETE",
       });
 
@@ -172,12 +173,12 @@ export default function ScheduledPage() {
             </thead>
             <tbody>
               {schedules.map((s) => (
-                <tr key={s._id} className="border-b">
+                <tr key={s.id} className="border-b">
                   <td>{s.message}</td>
-                  <td>{new Date(s.scheduledAt).toLocaleString()}</td>
+                  <td>{new Date(s.scheduled_at).toLocaleString()}</td>
                   <td>{Array.isArray(s.recipients) ? s.recipients.join(", ") : "No recipients"}</td>
                   <td>
-                    <Button onClick={() => handleCancel(s._id)}>Cancel</Button>
+                    <Button onClick={() => handleCancel(s.id)}>Cancel</Button>
                   </td>
                 </tr>
               ))}

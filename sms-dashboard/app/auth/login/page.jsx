@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Mail, Lock } from "lucide-react";
 
+import { API_BASE_URL } from "@/lib/api";
+
 export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const API_BASE_URL = "https://sms-saas-53mg.vercel.app/api/v1";
 
   const handleLogin = async () => {
     if (!email || !password) {

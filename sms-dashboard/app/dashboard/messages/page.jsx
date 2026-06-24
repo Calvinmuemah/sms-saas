@@ -10,6 +10,7 @@ import {
   DollarSign,
   CalendarDays,
 } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 import Navbar from "@/components/ui/navbar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +31,7 @@ export default function MessagesPage() {
       setLoading(true);
 
       const res = await fetch(
-        "https://sms-saas-53mg.vercel.app/api/v1/messages"
+        `${API_BASE_URL}/messages`
       );
 
       if (!res.ok) {

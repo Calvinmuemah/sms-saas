@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function ProfilePage() {
   const [user, setUser] = useState({
@@ -26,7 +27,9 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
-      const res = await fetch("/api/v1/profile");
+      const res = await fetch(`${API_BASE_URL}/profile`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       const data = await res.json();
 
       setUser({
@@ -46,10 +49,11 @@ export default function ProfilePage() {
     try {
       setLoading(true);
 
-      await fetch("/api/v1/profile", {
+      await fetch(`${API_BASE_URL}/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           ...user,

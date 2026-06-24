@@ -2,7 +2,7 @@ import * as service from "../services/profile.service.js";
 
 export const getProfile = async (req, res) => {
   try {
-    const userId = 1; // 🔥 replace with auth later
+    const userId = req.user.id;
     const user = await service.getProfile(userId);
     res.json(user);
   } catch (err) {
@@ -12,7 +12,7 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const userId = 1;
+    const userId = req.user.id;
     const user = await service.updateProfile(userId, req.body);
     res.json(user);
   } catch (err) {

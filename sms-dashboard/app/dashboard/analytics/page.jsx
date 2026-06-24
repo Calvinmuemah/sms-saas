@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Pie, Line } from "react-chartjs-2";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -31,7 +32,7 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/analytics");
+      const res = await fetch(`${API_BASE_URL}/analytics`);
       const json = await res.json();
       setData(json);
     } catch {
@@ -46,7 +47,7 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const fetchMessageStats = async () => {
       try {
-        const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/messages");
+        const res = await fetch(`${API_BASE_URL}/messages`);
         if (!res.ok) {
           throw new Error("Failed to fetch message stats");
         }

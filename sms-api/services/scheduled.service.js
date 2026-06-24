@@ -4,7 +4,10 @@ export const getAll = async () => {
   const { rows } = await pool.query(
     "SELECT * FROM scheduled ORDER BY scheduled_at ASC"
   );
-  return rows;
+  return rows.map((row) => ({
+    ...row,
+    recipients: typeof row.recipients === "string" ? JSON.parse(row.recipients) : row.recipients,
+  }));
 };
 
 export const create = async ({ message, scheduledAt, recipients }) => {

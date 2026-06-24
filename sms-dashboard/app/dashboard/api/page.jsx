@@ -14,6 +14,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function ApiPage() {
   const [apiKey, setApiKey] = useState(null);
@@ -21,7 +22,9 @@ export default function ApiPage() {
 
   const fetchKey = async () => {
     try {
-      const res = await fetch("/api/v1/api-key");
+      const res = await fetch(`${API_BASE_URL}/api-key`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       const data = await res.json();
       setApiKey(data.key);
     } catch {
@@ -37,8 +40,9 @@ export default function ApiPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/v1/api-key", {
+      const res = await fetch(`${API_BASE_URL}/api-key`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       const data = await res.json();
@@ -55,8 +59,9 @@ export default function ApiPage() {
 
   const revokeKey = async () => {
     try {
-      await fetch("/api/v1/api-key", {
+      await fetch(`${API_BASE_URL}/api-key`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       setApiKey(null);

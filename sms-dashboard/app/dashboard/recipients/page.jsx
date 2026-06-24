@@ -18,8 +18,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/api";
 
-const API = "https://sms-saas-53mg.vercel.app/api/v1/recipients";
+const API = `${API_BASE_URL}/recipients`;
 
 export default function RecipientsPage() {
   const [recipients, setRecipients] = useState([]);

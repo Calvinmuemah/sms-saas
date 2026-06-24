@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Mail, Lock, User } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ name, email, password }),
@@ -49,7 +50,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/auth/verify-otp", {
+      const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ email, otp }),

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Users,
   Search,
@@ -17,7 +18,7 @@ export default function UsersPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("https://sms-saas-53mg.vercel.app/api/v1/users/all")
+    fetch(`${API_BASE_URL}/users/all`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch users");
@@ -41,8 +42,8 @@ export default function UsersPage() {
     u.phone.includes(search)
   );
 
-  const optedIn = users.filter((u) => u.optedIn).length;
-  const optedOut = users.filter((u) => !u.optedIn).length;
+  const optedIn = users.filter((u) => u.opted_in).length;
+  const optedOut = users.filter((u) => !u.opted_in).length;
 
   return (
     <div className="space-y-8">
@@ -205,7 +206,7 @@ export default function UsersPage() {
                 {filteredUsers.length > 0 ? (
                   filteredUsers.map((u) => (
                     <tr
-                      key={u._id}
+                      key={u.phone}
                       className="border-t hover:bg-gray-50 transition"
                     >
 
@@ -217,12 +218,12 @@ export default function UsersPage() {
 
                         <span
                           className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                            u.optedIn
+                            u.opted_in
                               ? "bg-green-100 text-green-700"
                               : "bg-red-100 text-red-700"
                           }`}
                         >
-                          {u.optedIn ? "Opted In" : "Opted Out"}
+                          {u.opted_in ? "Opted In" : "Opted Out"}
                         </span>
 
                       </td>

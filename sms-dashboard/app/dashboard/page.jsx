@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Pie } from "react-chartjs-2";
 import { toast } from "sonner";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { API_BASE_URL } from "@/lib/api";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -36,7 +37,7 @@ export default function Dashboard() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/users", {
+      const res = await fetch(`${API_BASE_URL}/users`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
@@ -49,7 +50,7 @@ export default function Dashboard() {
   const fetchUserCounts = async () => {
     try {
       const res = await fetch(
-        "https://sms-saas-53mg.vercel.app/api/v1/users/counts",
+        `${API_BASE_URL}/users/counts`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -86,7 +87,7 @@ export default function Dashboard() {
       setLoading(true);
       setResult(null);
 
-      const res = await fetch("https://sms-saas-53mg.vercel.app/api/v1/send", {
+      const res = await fetch(`${API_BASE_URL}/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/counts", fetchUserCounts);
 
 // Route to fetch all users
+router.get("/", fetchAllUsers);
 router.get("/all", fetchAllUsers);
 
 export default router;

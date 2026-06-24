@@ -3,6 +3,7 @@ dotenv.config({ quiet: true });
 
 import app from "./app.js";
 import { connectDB } from "./config/db.js";
+import { startScheduler } from "./services/schedulerService.js";
 
 const startServer = async () => {
   try {
@@ -13,6 +14,8 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      // Start background scheduler
+      startScheduler();
     });
 
   } catch (error) {

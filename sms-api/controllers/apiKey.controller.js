@@ -2,7 +2,7 @@ import * as service from "../services/apiKey.service.js";
 
 export const getApiKey = async (req, res) => {
   try {
-    const userId = 1;
+    const userId = req.user.id;
     const key = await service.getKey(userId);
     res.json(key);
   } catch {
@@ -12,7 +12,7 @@ export const getApiKey = async (req, res) => {
 
 export const createApiKey = async (req, res) => {
   try {
-    const userId = 1;
+    const userId = req.user.id;
     const key = await service.createKey(userId);
     res.json(key);
   } catch {
@@ -22,7 +22,7 @@ export const createApiKey = async (req, res) => {
 
 export const deleteApiKey = async (req, res) => {
   try {
-    const userId = 1;
+    const userId = req.user.id;
     await service.deleteKey(userId);
     res.json({ message: "Deleted" });
   } catch {
