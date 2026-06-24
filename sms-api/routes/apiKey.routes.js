@@ -12,6 +12,6 @@ router.use(requireAuth);
 
 router.get("/", getApiKey);
 router.post("/", createApiKey);
-router.delete("/", deleteApiKey);
+router.delete("/:id", deleteApiKey);
 
 export default router;

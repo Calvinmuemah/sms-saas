@@ -10,22 +10,13 @@ import {
   Save,
 } from "lucide-react";
 
-import Navbar from "@/components/ui/navbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function SettingsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/40 to-white text-gray-900">
-
-      <Navbar />
-
-      {/* SMALLER SIDE MARGINS */}
-      <div className="pt-24 pb-10 px-3 md:px-4">
-
-        {/* FULL WIDTH CONTAINER */}
-        <div className="max-w-full space-y-8">
+    <div className="space-y-6">
 
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -336,10 +327,6 @@ export default function SettingsPage() {
             </div>
 
           </div>
-
-        </div>
-
-      </div>
 
     </div>
   );

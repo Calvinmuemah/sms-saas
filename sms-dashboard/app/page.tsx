@@ -174,8 +174,69 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-6 text-center">
-        <p>&copy; {new Date().getFullYear()} SMS Dashboard. All rights reserved.</p>
+      <footer className="bg-gray-950 text-gray-400 border-t border-gray-900 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+          {/* Brand Column */}
+          <div className="col-span-2 space-y-4">
+            <span className="text-white font-extrabold text-xl tracking-tight">
+              SMS SaaS Platform
+            </span>
+            <p className="text-gray-400 text-sm max-w-xs leading-relaxed font-medium">
+              Easen bulk messaging campaigns and developer API notifications. Built for high throughput, robust scheduled queuing, and complete dashboard control.
+            </p>
+            <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-900/30 px-3.5 py-1 rounded-full text-xs font-bold text-emerald-400 shadow-sm w-fit">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              All Services Operational
+            </div>
+          </div>
+
+          {/* Column 2: Product */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider">Product</h4>
+            <ul className="space-y-2 text-sm font-semibold">
+              <li><a href="#features" className="hover:text-emerald-400 transition-colors">Features</a></li>
+              <li><a href="/dashboard/campaigns" className="hover:text-emerald-400 transition-colors">Campaigns</a></li>
+              <li><a href="/dashboard/api" className="hover:text-emerald-400 transition-colors">API Docs</a></li>
+              <li><a href="/dashboard/billing" className="hover:text-emerald-400 transition-colors">Pricing</a></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider">Company</h4>
+            <ul className="space-y-2 text-sm font-semibold">
+              <li><a href="/about" className="hover:text-emerald-400 transition-colors">About Us</a></li>
+              <li><a href="/contact" className="hover:text-emerald-400 transition-colors">Contact</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">Careers</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">Press Kit</a></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Legal */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider">Legal</h4>
+            <ul className="space-y-2 text-sm font-semibold">
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">GDPR & DPA</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition-colors">Opt-Out Portal</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom copyright block */}
+        <div className="max-w-7xl mx-auto px-6 border-t border-gray-900/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-semibold">
+          <p>&copy; {new Date().getFullYear()} SMS SaaS Platform. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-white transition-colors">Status</a>
+            <a href="#" className="hover:text-white transition-colors">Security</a>
+            <span className="text-gray-800">|</span>
+            <span className="font-mono text-gray-600">v1.2.0</span>
+          </div>
+        </div>
       </footer>
     </div>
   );

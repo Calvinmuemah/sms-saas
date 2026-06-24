@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS recipient_groups (
 -- 4. api_keys (Developer API keys)
 CREATE TABLE IF NOT EXISTS api_keys (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE,
+    user_id INTEGER NOT NULL,
+    name VARCHAR(255) DEFAULT 'Default Project',
     key VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

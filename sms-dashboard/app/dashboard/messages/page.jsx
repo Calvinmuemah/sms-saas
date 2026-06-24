@@ -34,7 +34,12 @@ export default function MessagesPage() {
       setLoading(true);
 
       const res = await fetch(
-        `${API_BASE_URL}/messages`
+        `${API_BASE_URL}/messages`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
 
       if (!res.ok) {

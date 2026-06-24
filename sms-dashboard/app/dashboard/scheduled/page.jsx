@@ -28,7 +28,7 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/users/all`);
+      const res = await fetch(`${API_BASE_URL}/recipients`);
       const data = await res.json();
       setExistingRecipients(data.success && Array.isArray(data.data) ? data.data : []);
     } catch (error) {
@@ -49,9 +49,22 @@ export default function ScheduledPage() {
     }
   };
 
-  const handleSelectRecipient = (recipient) => {
-    if (!recipients.includes(recipient)) {
-      setRecipients([...recipients, recipient]);
+  const handleSelectRecipient = (groupName) => {
+    if (!groupName) return;
+    const selectedGroup = existingRecipients.find((g) => g.name === groupName);
+    if (selectedGroup && Array.isArray(selectedGroup.numbers)) {
+      // Normalize and strip double quotes/slashes from DB strings
+      const cleanedNumbers = selectedGroup.numbers
+        .map(num => num.replace(/[\"'\\]/g, '').trim())
+        .filter(Boolean);
+
+      const newNumbers = cleanedNumbers.filter(n => !recipients.includes(n));
+      if (newNumbers.length > 0) {
+        setRecipients([...recipients, ...newNumbers]);
+        toast.success(`Added ${newNumbers.length} recipients from group "${groupName}"`);
+      } else {
+        toast.info("All recipients from this group are already added.");
+      }
     }
   };
 
@@ -138,19 +151,31 @@ export default function ScheduledPage() {
                 className="w-full p-2 border rounded-lg"
                 onChange={(e) => handleSelectRecipient(e.target.value)}
               >
-                <option value="">Select a recipient</option>
+                <option value="">Select a recipient group</option>
                 {existingRecipients.map((recipient) => (
-                  <option key={recipient.phone} value={recipient.phone}>
-                    {recipient.phone}
+                  <option key={recipient.id} value={recipient.name}>
+                    {recipient.name}
                   </option>
                 ))}
               </select>
             </div>
           </div>
-          <ul className="mt-4">
+          <ul className="mt-4 flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border rounded-xl bg-gray-50/50">
             {recipients.map((r, index) => (
-              <li key={index}>{r}</li>
+              <li key={index} className="flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-semibold animate-in fade-in zoom-in-95">
+                {r}
+                <button
+                  type="button"
+                  onClick={() => setRecipients(recipients.filter((_, idx) => idx !== index))}
+                  className="hover:text-red-500 font-bold ml-1 transition cursor-pointer text-xs"
+                >
+                  &times;
+                </button>
+              </li>
             ))}
+            {recipients.length === 0 && (
+              <span className="text-gray-400 text-xs p-1">No recipients added yet</span>
+            )}
           </ul>
           <Button onClick={handleSchedule} disabled={loading}>
             {loading ? "Scheduling..." : "Schedule"}

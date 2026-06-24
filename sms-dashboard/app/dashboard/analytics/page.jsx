@@ -32,7 +32,11 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/analytics`);
+      const res = await fetch(`${API_BASE_URL}/analytics`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const json = await res.json();
       setData(json);
     } catch {
@@ -47,7 +51,11 @@ export default function AnalyticsPage() {
   useEffect(() => {
     const fetchMessageStats = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/messages`);
+        const res = await fetch(`${API_BASE_URL}/messages`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         if (!res.ok) {
           throw new Error("Failed to fetch message stats");
         }
