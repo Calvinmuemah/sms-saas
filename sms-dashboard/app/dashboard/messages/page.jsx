@@ -9,6 +9,8 @@ import {
   RefreshCw,
   DollarSign,
   CalendarDays,
+  Eye,
+  X,
 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 
@@ -24,6 +26,7 @@ export default function MessagesPage() {
   const [error, setError] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [selectedMessage, setSelectedMessage] = useState(null);
 
   // FETCH MESSAGES
   const fetchMessages = async () => {
@@ -299,6 +302,10 @@ export default function MessagesPage() {
 
                       <tr className="text-left">
 
+                        <th className="px-6 py-4 text-sm font-bold text-gray-700 w-16">
+                          #
+                        </th>
+
                         <th className="px-6 py-4 text-sm font-bold text-gray-700">
                           Phone
                         </th>
@@ -323,17 +330,25 @@ export default function MessagesPage() {
                           Date
                         </th>
 
+                        <th className="px-6 py-4 text-sm font-bold text-gray-700 text-center">
+                          Actions
+                        </th>
+
                       </tr>
 
                     </thead>
 
                     <tbody>
 
-                      {filteredMessages.map((m) => (
+                      {filteredMessages.map((m, i) => (
                         <tr
                           key={m.id}
                           className="border-b hover:bg-green-50/40 transition"
                         >
+
+                          <td className="px-6 py-5 font-bold text-gray-400">
+                            {i + 1}
+                          </td>
 
                           <td className="px-6 py-5 font-medium">
                             {m.phone}
@@ -381,6 +396,16 @@ export default function MessagesPage() {
 
                           </td>
 
+                          <td className="px-6 py-5 text-center">
+                            <button
+                              onClick={() => setSelectedMessage(m)}
+                              className="p-2 text-green-600 hover:bg-green-50 rounded-xl transition cursor-pointer"
+                              title="View full message"
+                            >
+                              <Eye size={18} />
+                            </button>
+                          </td>
+
                         </tr>
                       ))}
 
@@ -398,6 +423,74 @@ export default function MessagesPage() {
         </div>
 
       </div>
+
+      {/* VIEW MODAL */}
+      {selectedMessage && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3 z-50 animate-in fade-in">
+          <div className="bg-white w-full max-w-lg rounded-3xl p-6 space-y-4 animate-in zoom-in-95 shadow-2xl text-left">
+            <div className="flex justify-between items-center border-b pb-3">
+              <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
+                <MessageSquare className="text-green-600" /> Message Details
+              </h2>
+              <button 
+                onClick={() => setSelectedMessage(null)}
+                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-3 text-sm text-gray-700">
+              <div>
+                <span className="text-xs text-gray-400 block uppercase font-bold">Recipient Phone</span>
+                <span className="font-semibold text-base">{selectedMessage.phone}</span>
+              </div>
+              
+              <div>
+                <span className="text-xs text-gray-400 block uppercase font-bold text-gray-400">Status</span>
+                <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-bold mt-1 ${
+                  selectedMessage.status === "Success"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-600"
+                }`}>
+                  {selectedMessage.status}
+                </span>
+              </div>
+              
+              <div>
+                <span className="text-xs text-gray-400 block uppercase font-bold">Cost</span>
+                <span className="font-semibold">{selectedMessage.cost || "0.00"} KES</span>
+              </div>
+
+              <div>
+                <span className="text-xs text-gray-400 block uppercase font-bold">Message ID</span>
+                <span className="font-mono text-gray-600">{selectedMessage.message_id || "N/A"}</span>
+              </div>
+
+              <div>
+                <span className="text-xs text-gray-400 block uppercase font-bold">Sent Date</span>
+                <span>{new Date(selectedMessage.created_at).toLocaleString()}</span>
+              </div>
+
+              <div className="border-t pt-3">
+                <span className="text-xs text-gray-400 block uppercase font-bold mb-1">Message Content</span>
+                <div className="bg-gray-50 p-4 rounded-xl border max-h-[200px] overflow-y-auto whitespace-pre-wrap text-gray-700">
+                  {selectedMessage.message}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button 
+                onClick={() => setSelectedMessage(null)}
+                className="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-xl text-white text-sm font-semibold transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

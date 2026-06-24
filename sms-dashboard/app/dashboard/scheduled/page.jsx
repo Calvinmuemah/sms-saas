@@ -28,12 +28,11 @@ export default function ScheduledPage() {
 
   const fetchExistingRecipients = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/recipients`);
+      const res = await fetch(`${API_BASE_URL}/users/all`);
       const data = await res.json();
-      console.log("Recipients API Response:", data); // Debugging log
-      setExistingRecipients(Array.isArray(data) ? data : []); // Ensure data is an array
+      setExistingRecipients(data.success && Array.isArray(data.data) ? data.data : []);
     } catch (error) {
-      console.error("Error fetching recipients:", error); // Log errors
+      console.error("Error fetching recipients:", error);
       toast.error("Failed to load recipients");
     }
   };
@@ -141,7 +140,7 @@ export default function ScheduledPage() {
               >
                 <option value="">Select a recipient</option>
                 {existingRecipients.map((recipient) => (
-                  <option key={recipient.id} value={recipient.phone}>
+                  <option key={recipient.phone} value={recipient.phone}>
                     {recipient.phone}
                   </option>
                 ))}
