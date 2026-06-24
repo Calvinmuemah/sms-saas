@@ -1,8 +1,11 @@
 import express from "express";
 import { createRecipient, fetchRecipients } from "../controllers/recipient.controller.js";
 import { updateRecipient, deleteRecipient } from "../controllers/recipient.controller.js";
+import { requireAuth } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 // Route to create a recipient group
 router.post("/", createRecipient);

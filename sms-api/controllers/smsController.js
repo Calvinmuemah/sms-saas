@@ -8,6 +8,7 @@ import {
 import { createMessage } from "../models/Message.js";
 import isValidNumber, { normalizeNumber } from "../utils/validateNumber.js";
 import { sendBulkSMS } from "../services/smsService.js";
+import { checkAndDeductBilling } from "../services/billing.service.js";
 import pool from "../config/db.js";
 
 // 📥 CALLBACK (OPT IN / OUT)
@@ -92,6 +93,15 @@ export const sendSMS = async (req, res) => {
     return res.json({ success: false, message: "No valid recipients" });
   }
 
+  const userId = req.user.id;
+
+  // Enforce billing check before triggering AfricasTalking / simulated sending
+  try {
+    await checkAndDeductBilling(userId, recipients.length);
+  } catch (billingErr) {
+    return res.status(402).json({ success: false, error: billingErr.message });
+  }
+
   try {
     const results = await sendBulkSMS(recipients, message);
 
@@ -112,6 +122,7 @@ export const sendSMS = async (req, res) => {
         status: r.status,
         cost: r.cost || null,
         messageId: r.messageId,
+        userId,
       });
     }
 
@@ -156,7 +167,11 @@ export const deliveryReport = async (req, res) => {
 // 📜 GET ALL MESSAGES
 export const getAllMessages = async (req, res) => {
   try {
-    const { rows: messages } = await pool.query("SELECT * FROM messages ORDER BY created_at DESC");
+    const userId = req.user.id;
+    const { rows: messages } = await pool.query(
+      "SELECT * FROM messages WHERE user_id = $1 ORDER BY created_at DESC",
+      [userId]
+    );
     res.json({ success: true, messages });
   } catch (err) {
     console.error(err);

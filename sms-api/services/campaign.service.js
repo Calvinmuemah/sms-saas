@@ -1,25 +1,28 @@
 import pool from "../config/db.js";
 import { sendBulkSMS } from "./smsService.js";
+import { checkAndDeductBilling } from "./billing.service.js";
+import { createMessage } from "../models/Message.js";
 
-export const getCampaigns = async () => {
+export const getCampaigns = async (userId) => {
   const { rows } = await pool.query(
-    "SELECT * FROM campaigns ORDER BY created_at DESC"
+    "SELECT * FROM campaigns WHERE user_id = $1 ORDER BY created_at DESC",
+    [userId]
   );
   return rows;
 };
 
-export const createCampaign = async ({ name, message }) => {
+export const createCampaign = async ({ name, message, recipient }, userId) => {
   const { rows } = await pool.query(
-    "INSERT INTO campaigns(name, message) VALUES($1,$2) RETURNING *",
-    [name, message]
+    "INSERT INTO campaigns(name, message, recipient, user_id) VALUES($1, $2, $3, $4) RETURNING *",
+    [name, message, recipient, userId]
   );
   return rows[0];
 };
 
-export const sendCampaign = async (id) => {
+export const sendCampaign = async (id, userId) => {
   const campaign = await pool.query(
-    "SELECT * FROM campaigns WHERE id=$1",
-    [id]
+    "SELECT * FROM campaigns WHERE id=$1 AND user_id=$2",
+    [id, userId]
   );
 
   if (campaign.rows.length === 0) {
@@ -37,7 +40,12 @@ export const sendCampaign = async (id) => {
     );
     if (groupQuery.rows.length > 0) {
       const numbersStr = groupQuery.rows[0].numbers || "";
-      numbers = numbersStr.split(",").map((n) => n.trim()).filter(Boolean);
+      // Strip outer quotes and brackets if present
+      const cleanedStr = numbersStr.replace(/^["'\[]+|["'\]]+$/g, '').trim();
+      numbers = cleanedStr
+        .split(/[\n,"]+/)
+        .map((n) => n.trim())
+        .filter(Boolean);
     }
   } else {
     // Fallback: send to all opted-in contacts
@@ -56,10 +64,29 @@ export const sendCampaign = async (id) => {
     numbers = numbers.filter((phone) => !optedOutNumbers.has(phone));
   }
 
-  if (numbers.length > 0) {
-    await sendBulkSMS(numbers, campaignData.message);
+  if (numbers.length === 0) {
+    throw new Error("No valid recipient numbers to send campaign to.");
   }
 
+  // 1. Enforce billing checks and credit deductions
+  await checkAndDeductBilling(userId, numbers.length);
+
+  // 2. Dispatch bulk SMS messages
+  const results = await sendBulkSMS(numbers, campaignData.message);
+
+  // 3. Log sent messages in DB for dashboard metrics
+  for (let r of results) {
+    await createMessage({
+      phone: r.number,
+      message: campaignData.message,
+      status: r.status,
+      cost: r.cost || null,
+      messageId: r.messageId,
+      userId,
+    });
+  }
+
+  // 4. Update campaign status
   await pool.query(
     "UPDATE campaigns SET status='sent', recipients=$1 WHERE id=$2",
     [numbers.length, id]

@@ -1,7 +1,12 @@
 import * as service from "../services/scheduled.service.js";
 
 export const getAll = async (req, res) => {
-  res.json(await service.getAll());
+  try {
+    const userId = req.user.id;
+    res.json(await service.getAll(userId));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 export const create = async (req, res) => {
@@ -9,10 +14,20 @@ export const create = async (req, res) => {
   if (!message || !scheduledAt || !recipients) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  res.json(await service.create({ message, scheduledAt, recipients }));
+  try {
+    const userId = req.user.id;
+    res.json(await service.create({ message, scheduledAt, recipients }, userId));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 export const remove = async (req, res) => {
-  await service.remove(req.params.id);
-  res.json({ message: "Deleted" });
+  try {
+    const userId = req.user.id;
+    await service.remove(req.params.id, userId);
+    res.json({ message: "Deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

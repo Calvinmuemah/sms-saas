@@ -33,7 +33,11 @@ export default function RecipientsPage() {
 
   const fetchRecipients = async () => {
     try {
-      const res = await fetch(API);
+      const res = await fetch(API, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setRecipients(data.data || []);
     } catch {
@@ -68,7 +72,10 @@ export default function RecipientsPage() {
 
       await fetch(API, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({
           name,
           numbers: numbers
@@ -92,7 +99,12 @@ export default function RecipientsPage() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`${API}/${id}`, { method: "DELETE" });
+      await fetch(`${API}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       toast.success("Deleted");
       fetchRecipients();
     } catch {
@@ -105,7 +117,10 @@ export default function RecipientsPage() {
     try {
       await fetch(`${API}/${editing.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(editing),
       });
 

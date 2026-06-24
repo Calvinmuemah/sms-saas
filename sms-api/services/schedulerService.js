@@ -1,6 +1,7 @@
 import pool from "../config/db.js";
 import { sendBulkSMS } from "./smsService.js";
 import { createMessage } from "../models/Message.js";
+import { checkAndDeductBilling } from "./billing.service.js";
 
 export const startScheduler = () => {
   console.log("Scheduler service initialized. Polling database every 60 seconds...");
@@ -36,6 +37,11 @@ export const startScheduler = () => {
           const activeRecipients = recipients.filter((phone) => !optedOutSet.has(phone));
 
           if (activeRecipients.length > 0) {
+            // Apply billing check and deduction for background scheduled campaigns
+            if (row.user_id) {
+              await checkAndDeductBilling(row.user_id, activeRecipients.length);
+            }
+
             console.log(`Sending scheduled message ID ${row.id} to ${activeRecipients.length} recipients.`);
             const results = await sendBulkSMS(activeRecipients, row.message);
 
@@ -47,6 +53,7 @@ export const startScheduler = () => {
                 status: r.status,
                 cost: r.cost || null,
                 messageId: r.messageId,
+                userId: row.user_id,
               });
             }
           } else {

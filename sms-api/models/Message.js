@@ -7,14 +7,15 @@ export const createMessage = async ({
   status = "Pending",
   cost = null,
   messageId = null,
+  userId = null,
 }) => {
   const query = `
-    INSERT INTO messages (phone, message, status, cost, message_id)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO messages (phone, message, status, cost, message_id, user_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *;
   `;
 
-  const values = [phone, message, status, cost, messageId];
+  const values = [phone, message, status, cost, messageId, userId];
 
   const result = await pool.query(query, values);
   return result.rows[0];

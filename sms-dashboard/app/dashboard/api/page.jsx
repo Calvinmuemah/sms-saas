@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { API_BASE_URL } from "@/lib/api";
+import Navbar from "@/components/ui/navbar";
 
 export default function ApiPage() {
   const [apiKeys, setApiKeys] = useState([]);
@@ -339,8 +340,12 @@ puts response.body`,
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-6">
-      {/* HEADER HERO AREA */}
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/40 to-white text-gray-900">
+      <Navbar />
+
+      <div className="pt-24 pb-10 px-3 md:px-4">
+        <div className="max-w-full space-y-8">
+          {/* HEADER HERO AREA */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-600 via-emerald-600 to-teal-800 p-8 md:p-12 text-white shadow-2xl transition duration-500">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-12 translate-x-12"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-500/10 rounded-full blur-2xl translate-y-12 -translate-x-12"></div>
@@ -604,6 +609,8 @@ puts response.body`,
               </div>
             </CardContent>
           </Card>
+        </div>
+      </div>
         </div>
       </div>
     </div>

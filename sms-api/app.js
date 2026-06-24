@@ -13,6 +13,7 @@ import profileRoutes from "./routes/profile.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import recipientRoutes from "./routes/recipient.routes.js";
+import billingRoutes from "./routes/billing.routes.js";
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/recipients", recipientRoutes);
+app.use("/api/v1/billing", billingRoutes);
+
 
 
 // Health check
